@@ -7,13 +7,20 @@ services:
     ports:
       - '5432:5432'
     env_file:
-      - ../db_docker_env
-    volumes:
-      - 'hargrove_data:/postgresql'
-      - 'hargrove_conf:/postgresql/conf'
-      - 'hargrove_init:/docker-entrypoint-initdb.d'
-      - 'hargrove_preinit:/docker-entrypoint-preinitdb.d'
+      - ../docker_env
 
+  trade_fox:
+    container_name: runner
+    image: trade-fox:0.0.1
+    env_file:
+      - ../docker_env
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+    - "8000:8000"
+    depends_on:
+      - postgresql
 
 volumes:
   hargrove_data:

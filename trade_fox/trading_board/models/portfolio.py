@@ -7,3 +7,7 @@ class Portfolio(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def trade_history(self):
+        return self.trades.all().order_by("date")

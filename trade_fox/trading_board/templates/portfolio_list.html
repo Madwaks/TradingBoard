@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Trading Board</title>
+    </head>
+    <body>
+        <h1>Mes portefeuilles</h1>
+        <table>
+            <tr>
+                <th>Nom du portefeuille</th>
+                <th>Montant</th>
+            </tr>
+            {% for trade in object_list %}
+            <tr>
+                <td>{{ trade.name }}</td>
+                <td>{{ trade.amount }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

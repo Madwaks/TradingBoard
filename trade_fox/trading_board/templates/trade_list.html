@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Portfolios</title>
+    </head>
+    <body>
+        <h1>Trades</h1>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Sens</th>
+                <th>Prix d'achat</th>
+                <th>Prix de vente</th>
+                <th>Portfolio</th>
+
+            </tr>
+            {% for trade in object_list %}
+            <tr>
+                <td>{{ trade.date }}</td>
+                <td>{{ trade.type }}</td>
+                <td>{{ trade.open_price }}</td>
+                <td>{{ trade.close_price }}</td>
+                <td><a href="/portfolio/{{ trade.portfolio.pk }}/">{{ trade.portfolio.name }}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

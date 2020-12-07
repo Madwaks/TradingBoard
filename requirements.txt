@@ -10,7 +10,6 @@ dateparser
 requests
 injector
 selenium
-django
 bs4
 lazy-property==0.0.1
 pandas
