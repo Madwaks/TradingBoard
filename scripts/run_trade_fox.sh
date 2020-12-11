@@ -10,4 +10,4 @@ echo "Running migrate"
 python /app/manage.py migrate
 
 echo "Running server"
-python /app/manage.py runserver 0.0.0.0:8000
+python /app/manage.py "${@}"
