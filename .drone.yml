@@ -46,8 +46,6 @@ steps:
       image: "madwaks/tradingboard"
       environment:
         <<: *common_environment
-      volumes:
-        <<: *generic_step_volume
       commands:
         - "runserver"
       settings:
