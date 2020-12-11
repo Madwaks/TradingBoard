@@ -54,8 +54,6 @@ steps:
         pushtags: "false"
         dockerfile: "docker/Dockerfile"
         login: true
-        ignore_registry_on_build: "true"
-        registry: "matchawine.azurecr.io"
         username:
             from_secret: DOCKER_USERNAME
         password:
