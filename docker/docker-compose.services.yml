@@ -13,7 +13,8 @@ services:
       - 'hargrove_conf:/postgresql/conf'
       - 'hargrove_init:/docker-entrypoint-initdb.d'
       - 'hargrove_preinit:/docker-entrypoint-preinitdb.d'
-
+    networks:
+      - trading-net
 
 volumes:
   hargrove_data:
@@ -28,3 +29,7 @@ volumes:
   hargrove_preinit:
     name: hargrove_preinit
     driver: local
+
+networks:
+  trading-net:
+    name: trading_network
