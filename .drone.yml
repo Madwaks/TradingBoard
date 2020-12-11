@@ -43,19 +43,10 @@ triggers:
         - push
 
 steps:
-    - name: "build_runner"
-      image: "madwaks/tradingboard"
-      commands:
-        - "runserver"
-      settings:
-        forcetag: "runner-tradingboard"
-        pushtags: "false"
-        dockerfile: "docker/Dockerfile"
-        login: true
-        username:
-            from_secret: DOCKER_USERNAME
-        password:
-            from_secret: DOCKER_PASSWORD
+  - name: fr
+    image: alpine
+    commands:
+      - echo bonjour monde
       when:
         branch:
             - master
