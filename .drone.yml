@@ -1,5 +1,6 @@
 ---
 kind: pipeline
+type: docker
 name: test_trading_board
 
 platform:
