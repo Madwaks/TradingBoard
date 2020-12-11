@@ -45,8 +45,6 @@ triggers:
 steps:
     - name: "build_runner"
       image: "madwaks/tradingboard"
-      environment:
-        <<: *common_environment
       commands:
         - "runserver"
       settings:
