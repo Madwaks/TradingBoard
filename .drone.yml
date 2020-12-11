@@ -47,7 +47,7 @@ steps:
     image: alpine
     commands:
       - echo bonjour monde
-      when:
-        branch:
-            - master
-            - develop
+    when:
+      branch:
+          - master
+          - develop
