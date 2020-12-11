@@ -1,0 +1,66 @@
+---
+kind: pipeline
+name: test_trading_board
+
+platform:
+  os: linux
+  arch: amd64
+
+x-generic_environment: &common_environment
+    DRONE_DOCKER_CONFIG: "/root/.docker/config.json"
+
+x-generic-step-volume: &generic_step_volume
+  - name: "docker_socket"
+    path: "/var/run/docker/sock"
+  - name: "shared_memory"
+    path: "/dev/shm"
+
+x-generic-publish-settings: &generic_publish_settings
+    username:
+        from_secret: "DOCKER_USERNAME"
+    password:
+        from_secret: "DOCKER_PASSWORD"
+    pushtags: "true"
+    login: "true"
+    registry: "madwaks"
+
+services:
+    - name: postgresql
+      image: bitnami/postgresql:latest
+      environment:
+          POSTGRESQL_USERNAME: postgresql
+          POSTGRESQL_PASSWORD: atporder
+          POSTGRESQL_DATABASE: tradingboard
+      ports:
+        - 27017
+
+triggers:
+    branch:
+        include:
+            - master
+    event:
+        - push
+
+steps:
+    - name: "build_runner"
+      image: "madwaks/tradingboard"
+      environment:
+        <<: *common_environment
+      volumes:
+        <<: *generic_step_volume
+      commands:
+        - "runserver"
+      settings:
+        forcetag: "runner-tradingboard"
+        pushtags: "false"
+        dockerfile: "docker/Dockerfile"
+        login: true
+        ignore_registry_on_build: "true"
+        registry: "matchawine.azurecr.io"
+        username:
+            from_secret: DOCKER_USERNAME
+        password:
+            from_secret: DOCKER_PASSWORD
+      when:
+        branch:
+            - master
