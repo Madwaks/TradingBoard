@@ -52,4 +52,4 @@ steps:
           - master
           - develop
     volumes:
-      - <<: *generic_step_volume
+      <<: *generic_step_volume
