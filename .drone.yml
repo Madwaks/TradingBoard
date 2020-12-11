@@ -42,17 +42,17 @@ triggers:
     event:
         - push
 
-steps:
-  - name: fr
-    image: alpine
-    commands:
-      - echo bonjour monde
-    when:
-      branch:
-          - master
-          - develop
-    volumes:
-      - name: docker_socket
-        path: "/var/run/docker/sock"
-      - name: shared_memory
-        path: "/dev/shm"
+#steps:
+#  - name: fr
+#    image: alpine
+#    commands:
+#      - echo bonjour monde
+#    when:
+#      branch:
+#          - master
+#          - develop
+#    volumes:
+#      - name: docker_socket
+#        path: "/var/run/docker/sock"
+#      - name: shared_memory
+#        path: "/dev/shm"
