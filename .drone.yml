@@ -52,5 +52,7 @@ steps:
           - master
           - develop
     volumes:
-      - "/var/run/docker/sock:/var/run/docker/sock"
-      - "/dev/shm:/dev/shm"
+      - name: docker_socket
+        path: "/var/run/docker/sock"
+      - name: shared_memory
+        path: "/dev/shm"
