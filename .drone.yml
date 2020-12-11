@@ -50,4 +50,3 @@ steps:
     when:
       branch:
           - master
-          - develop
