@@ -1,4 +1,3 @@
-from datetime import time
 from enum import Enum
 
 from django.db import models
@@ -16,15 +15,14 @@ class TradeType(Enum):
 
 class Trade(models.Model):
     date = models.DateField()
-    type = models.CharField(max_length=128, choices=TradeType.choices(), blank=False, null=False)
+    type = models.CharField(
+        max_length=128, choices=TradeType.choices(), blank=False, null=False
+    )
     open_price = models.FloatField(default=0.0)
     close_price = models.FloatField(default=0.0)
 
     portfolio = models.ForeignKey(
-        "Portfolio",
-        on_delete=SET_NULL,
-        related_name="trades",
-        null=True,
+        "Portfolio", on_delete=SET_NULL, related_name="trades", null=True
     )
 
     def __str__(self):

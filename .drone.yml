@@ -38,9 +38,11 @@ triggers:
     branch:
         include:
             - master
+            - develop
+            - test
     event:
         - push
-        - develop
+        - pull-request
 
 steps:
   - name: fr

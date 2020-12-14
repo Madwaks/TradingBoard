@@ -13,7 +13,6 @@
                 <th>Prix d'achat</th>
                 <th>Prix de vente</th>
                 <th>Portfolio</th>
-
             </tr>
             {% for trade in object_list %}
             <tr>
@@ -25,5 +24,10 @@
             </tr>
             {% endfor %}
         </table>
+        <form action="/your-name/" method="post">
+            <label for="your_name">Your name: </label>
+            <input id="your_name" type="date" name="your_name" value="{{ current_name }}">
+            <input type="submit" value="Save">
+        </form>
     </body>
 </html>
