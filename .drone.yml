@@ -39,6 +39,7 @@ triggers:
         include:
             - master
             - develop
+            - test
     event:
         - push
         - pull-request
