@@ -54,7 +54,7 @@ def main(ctx):
                 "volumes": [{"name": "docker_socket", "path": "/var/run/docker/sock"}, {"name": "shared_memory", "path": "/dev/shm"}]
 
             }
-            ]
+        ]
         }
     ]
 
