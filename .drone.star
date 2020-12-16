@@ -32,7 +32,6 @@ def build_pipeline(ctx, name):
 
 
 def main(ctx):
-    pipelines = []
     name = "test_pipeline_to_try_a_trial"
     return [
         {
@@ -43,7 +42,7 @@ def main(ctx):
             "os": "linux",
             "arch": "amd64",
         },
-        "services": build_services(ctx),
+        "services": services(ctx),
         "triggers": {
             "branch": {
                         "include": ["master"]
