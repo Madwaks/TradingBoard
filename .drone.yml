@@ -7,22 +7,22 @@ platform:
   arch: amd64
 
 x-generic_environment: &common_environment
-    DRONE_DOCKER_CONFIG: "/root/.docker/config.json"
+    DRONE_DOCKER_CONFIG: '/root/.docker/config.json'
 
 x-generic-step-volume: &generic_step_volume
-  - name: "docker_socket"
-    path: "/var/run/docker/sock"
-  - name: "shared_memory"
-    path: "/dev/shm"
+  - name: 'docker_socket'
+    path: '/var/run/docker/sock'
+  - name: 'shared_memory'
+    path: '/dev/shm'
 
 x-generic-publish-settings: &generic_publish_settings
     username:
-        from_secret: "DOCKER_USERNAME"
+        from_secret: 'DOCKER_USERNAME'
     password:
-        from_secret: "DOCKER_PASSWORD"
-    pushtags: "true"
-    login: "true"
-    registry: "madwaks"
+        from_secret: 'DOCKER_PASSWORD'
+    pushtags: 'true'
+    login: 'true'
+    registry: 'madwaks'
 
 services:
     - name: postgresql
@@ -55,6 +55,6 @@ steps:
           - develop
     volumes:
       - name: docker_socket
-        path: "/var/run/docker/sock"
+        path: '/var/run/docker/sock'
       - name: shared_memory
-        path: "/dev/shm"
+        path: '/dev/shm'
