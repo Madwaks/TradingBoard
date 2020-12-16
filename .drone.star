@@ -25,12 +25,6 @@ def services(ctx):
 
     ]
 
-def build_pipeline(ctx, name):
-    pipeline = build_pipeline_nase(name=name)
-
-
-
-
 def main(ctx):
     name = "test_pipeline_to_try_a_trial"
     return [
