@@ -35,7 +35,7 @@ def main(ctx):
             {
                 "name": "a test step",
                 "image": "alpine",
-                "commands": ["echo Hello world"],
+                "commands": ["echo %s" % ctx],
                 "when": {
                     "branch": ["master", "develop"],
                 },
