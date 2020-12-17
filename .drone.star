@@ -1,15 +1,3 @@
-def build_pipeline_base(name):
-    pipeline = {
-        "kind": "pipeline",
-        "type": "docker",
-        "name": name,
-        "platform": {
-            "os": "linux",
-            "arch": "amd64",
-        },
-    }
-    return pipeline
-
 def services(ctx):
     return [
         {
