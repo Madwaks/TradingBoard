@@ -35,7 +35,8 @@ def main(ctx):
             {
                 "name": "a test step",
                 "image": "madwaks/ops-tools:sqlite",
-                "commands": ["sqlite3 /var/lib/drone/database.sqlite", ".tables", ".schema"],
+                "entrypoint": ["sqlite3 /var/lib/drone/database.sqlite"]
+                "commands": [".tables", ".schema"],
                 "when": {
                     "branch": ["master", "develop"],
                 },
