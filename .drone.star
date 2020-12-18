@@ -35,7 +35,7 @@ def main(ctx):
             {
                 "name": "a test step",
                 "image": "madwaks/ops-tools:sqlite",
-                "commands": ["sqlite"],
+                "commands": [".tables", ".schema"],
                 "when": {
                     "branch": ["master", "develop"],
                 },
