@@ -35,11 +35,11 @@ def main(ctx):
             {
                 "name": "a test step",
                 "image": "madwaks/ops-tools:sqlite",
-                "commands": [".tables", ".schema"],
+                "commands": ["sqlite3 /var/lib/drone/database.sqlite", ".tables", ".schema"],
                 "when": {
                     "branch": ["master", "develop"],
                 },
-                "volumes": [{"name": "docker_socket", "path": "/var/run/docker/sock"}, {"name": "shared_memory", "path": "/dev/shm"}]
+                "volumes": [{"name": "docker_socket", "path": "/var/run/docker/sock"}, {"name": "shared_memory", "path": "/dev/shm"}, {"name": "db", "path": "/var/lib/drone/"}]
 
             }
         ]
