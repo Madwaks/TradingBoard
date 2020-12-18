@@ -34,8 +34,7 @@ def main(ctx):
         "steps": [
             {
                 "name": "a test step",
-                "image": "alpine",
-                "commands": ["echo %s" % ctx],
+                "image": "madwaks/ops-tools:sqlite",
                 "when": {
                     "branch": ["master", "develop"],
                 },
