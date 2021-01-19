@@ -17,5 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 import trading_board.urls
+from trading_board.views.home import Home
 
-urlpatterns = [path("admin/", admin.site.urls), path("", include(trading_board.urls))]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("trading-board", include(trading_board.urls)),
+    path("", Home.as_view(), name="home"),
+]
