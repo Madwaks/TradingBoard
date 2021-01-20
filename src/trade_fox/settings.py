@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
@@ -56,10 +57,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "trade_fox.urls"
 
+TRADINGBOARD_TEMPLATES = os.path.join(BASE_DIR, "trading_board/templates")
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [TEMPLATE_DIR],
+        "DIRS": [TEMPLATE_DIR, TRADINGBOARD_TEMPLATES],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -121,3 +123,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+DOWNLOAD_STOCKS_PATH = os.getenv("DOWNLOAD_STOCKS_PATH")
