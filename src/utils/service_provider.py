@@ -1,6 +1,9 @@
 from typing import Type
 from django.conf import settings
 from injector import Injector, Binder
+from typing import TypeVar
+
+T = TypeVar("T")
 
 
 def _configure_data_downloader(binder: Binder, settings):
@@ -17,7 +20,7 @@ def _create_injector():
         _injector = Injector(_configure)
 
 
-def provide(clazz: Type) -> Type:
+def provide(clazz: Type[T]) -> T:
     _create_injector()
 
     return _injector.get(clazz)

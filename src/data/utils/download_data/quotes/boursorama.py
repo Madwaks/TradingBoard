@@ -58,7 +58,8 @@ class QuotationDownloader:
         time.sleep(1)
         try:
             five_years = self._driver_manager.driver.find_element_by_xpath(
-                '//*[@id="main-content"]/div/section[1]/div[2]/article/div[1]/div/div[1]/div[4]/div[2]/div[1]/div[3]/div[3]'
+                '//*[@id="main-content"]/div/section[1]/div[2]/article/div[1]/div/div[1]/div[4]/div[2]/div[1]/div['
+                "3]/div[3] "
             )
         except:
             five_years = self._driver_manager.driver.find_element_by_xpath(
