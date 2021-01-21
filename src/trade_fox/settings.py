@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ["51.68.230.72", "hosoda.tradefox.tech", "tradefox.tech", "127.0
 
 # Application definition
 
-LOCAL_APPS = ["trading_board.apps.TradingBoardConfig"]
+LOCAL_APPS = ["trading_board.apps.TradingBoardConfig", "data.apps.DataConfig"]
 
 INSTALLED_APPS = [
     *LOCAL_APPS,
@@ -124,4 +124,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-DOWNLOAD_STOCKS_PATH = os.getenv("DOWNLOAD_STOCKS_PATH")
+DOWNLOAD_STOCKS_PATH = os.getenv("DOWNLOAD_STOCKS_PATH", "static/data/quotes")
+CHROME_DRIVER_PATH = os.getenv(
+    "CHROME_DRIVER_PATH", "src/data/utils/driver_manager/chromedriver"
+)
+
+# DATA PATHS
+
+COMPANIES_JSON_PATH = Path("static/data/companies_with_sector2.json")

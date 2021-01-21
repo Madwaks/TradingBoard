@@ -11,7 +11,7 @@ class Company(models.Model):
     creation_date = models.IntegerField(blank=True, null=True)
     market_cap = models.CharField(max_length=128, blank=True, null=True)
 
-    local_file_path = models.CharField(max_length=128, blank=True, null=True)
+    quotes_file_path = models.CharField(max_length=128, blank=True, null=True)
 
     info_url = models.OneToOneField(
         "CompanyInfoUrl",

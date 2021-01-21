@@ -47,7 +47,7 @@ class QuotationDownloader:
         try:
             time.sleep(1)
             full_screen.click()
-        except Exception as e:
+        except Exception:
             infos = self._driver_manager.driver.find_element_by_class_name(
                 "c-table__cell--last"
             )
@@ -61,7 +61,7 @@ class QuotationDownloader:
                 '//*[@id="main-content"]/div/section[1]/div[2]/article/div[1]/div/div[1]/div[4]/div[2]/div[1]/div['
                 "3]/div[3] "
             )
-        except:
+        except Exception:
             five_years = self._driver_manager.driver.find_element_by_xpath(
                 '//*[@id="main-content"]/div/div/div[2]/div[1]/div/div[1]/div[2]/div[2]/div[1]/div[3]/div[3]'
             )

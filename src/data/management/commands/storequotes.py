@@ -3,7 +3,7 @@ import sys
 
 from django.core.management.base import BaseCommand
 
-from data.utils.store_data.update import QuotationStorer
+from data.utils.store_data.quotes import QuotationStorer
 from utils.service_provider import provide
 
 
