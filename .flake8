@@ -1,5 +1,6 @@
 [flake8]
-exclude = build,.git,.tox,./django/conf/app_template/*,./tests/.env
+exclude = build,.git,.tox,./django/conf/app_template/*,./tests/.env, *__init__*
+ignore = E501
 max-line-length = 119
 max-complexity = 18
 select = B,C,E,F,W,T4,B9
