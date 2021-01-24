@@ -22,7 +22,7 @@ from trading_board.views.home import Home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("tradingboard", include(trading_board.urls)),
+    path("tradingboard/", include(trading_board.urls)),
     path("", Home.as_view(), name="home"),
     path("login", LoginView.as_view(template_name="login.html"), name="login"),
 ]

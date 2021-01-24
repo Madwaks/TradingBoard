@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView, TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, TemplateView, CreateView
 
+from trading_board.forms.portfolio import PortfolioForm
 from trading_board.models import Portfolio
 
 
@@ -18,3 +20,10 @@ class PortfolioView(TemplateView):
         portfolio = Portfolio.objects.get(pk=pk)
         context = dict(portfolio=portfolio)
         return render(request, context=context, template_name=self.template_name)
+
+
+class AddPortfolio(CreateView):
+    form_class = PortfolioForm
+    model = Portfolio
+    template_name = "add_portfolio.html"
+    success_url = reverse_lazy("portfolios")

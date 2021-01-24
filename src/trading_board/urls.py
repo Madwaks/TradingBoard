@@ -1,12 +1,23 @@
 from django.urls import path
 
 from trading_board.views.home import TradingBoardHome
-from trading_board.views.portfolio import PortfolioListView, PortfolioView
+from trading_board.views.portfolio import PortfolioListView, AddPortfolio
 from trading_board.views.trade_list import TradeListView
+
 
 urlpatterns = [
     path("", TradingBoardHome.as_view()),
     path("trades/", TradeListView.as_view()),
-    path("portfolios/", PortfolioListView.as_view()),
-    path(r"portfolio/<int:pk>/", PortfolioView.as_view(), name="portfolio"),
+    path("portfolios/", PortfolioListView.as_view(), name="portfolios"),
+    path("add-portfolio/", AddPortfolio.as_view()),
+    path(
+        "delete-portfolio/<int:portfolio_id>",
+        AddPortfolio.as_view(),
+        name="delete_portfolio",
+    ),
+    path(
+        "edit-portfolio/<int:portfolio_id>",
+        AddPortfolio.as_view(),
+        name="edit_portfolio",
+    ),
 ]
