@@ -40,7 +40,8 @@ def main(ctx):
                     "password": {"from_secret": "DOCKER_PASSWORD"},
                     "repo": "tradingboard",
                     "tags": "test_tag",
-                    "dockerfile": "docker/Dockerfile"
+                    "dockerfile": "docker/Dockerfile",
+                    "login": "true"
                 },
                 "when": {
                     "branch": ["master", "develop"],
