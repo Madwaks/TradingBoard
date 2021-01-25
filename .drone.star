@@ -38,11 +38,10 @@ def main(ctx):
                 "settings": {
                     "username": {"from_secret": "DOCKER_USERNAME"},
                     "password": {"from_secret": "DOCKER_PASSWORD"},
-                    "repo": "tradingboard",
+                    "repo": "madwaks/tradingboard",
                     "tags": "test_tag",
                     "dockerfile": "docker/Dockerfile",
                     "login": "true",
-                    "registry": "madwaks"
                 },
                 "when": {
                     "branch": ["master", "develop"],
