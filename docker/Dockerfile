@@ -12,7 +12,7 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -U pip setuptools \
  && pip install --no-cache-dir -r requirements.txt
 
-COPY trade_fox/. /app/.
+COPY src/. /app/.
 COPY scripts/run_trade_fox.sh /app/.
 
 RUN chmod +x /app/run_trade_fox.sh
