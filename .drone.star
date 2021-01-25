@@ -24,7 +24,7 @@ def main(ctx):
             "os": "linux",
             "arch": "amd64",
         },
-        "services": services(ctx),
+        #"services": services(ctx),
         "triggers": {
             "branch": {
                         "include": ["master"]
