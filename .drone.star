@@ -41,7 +41,8 @@ def main(ctx):
                     "repo": "tradingboard",
                     "tags": "test_tag",
                     "dockerfile": "docker/Dockerfile",
-                    "login": "true"
+                    "login": "true",
+                    "registry": "madwaks"
                 },
                 "when": {
                     "branch": ["master", "develop"],
