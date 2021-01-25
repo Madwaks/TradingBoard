@@ -40,7 +40,7 @@ def main(ctx):
                     "password": {"from_secret": "DOCKER_PASSWORD"},
                     "repo": "tradingboard",
                     "tags": "test_tag"
-                }
+                },
                 "when": {
                     "branch": ["master", "develop"],
                 },
