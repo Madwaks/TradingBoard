@@ -114,8 +114,8 @@ function goToAdd() {
 
     </div>
     <div class="action">
-        <a class="edit" title="Edit" data-toggle="tooltip" href="{% url 'edit_portfolio' portfolio.id %}">Edit</a>
-        <a class="delete" title="Delete" data-toggle="tooltip" href="{% url 'delete_portfolio' portfolio.id%}">Delete</a>
+        <a class="edit" title="Edit" data-toggle="tooltip" href="{% url 'edit_portfolio' portfolio.pk %}">Edit</a>
+        <a class="delete" title="Delete" data-toggle="tooltip" href="{% url 'delete_portfolio' portfolio.pk%}">Delete</a>
     </div>
     {% endfor %}
 </div>

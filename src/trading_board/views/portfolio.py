@@ -1,6 +1,12 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, TemplateView, CreateView
+from django.views.generic import (
+    ListView,
+    TemplateView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 
 from trading_board.forms.portfolio import PortfolioForm
 from trading_board.models import Portfolio
@@ -26,4 +32,16 @@ class AddPortfolio(CreateView):
     form_class = PortfolioForm
     model = Portfolio
     template_name = "add_portfolio.html"
+    success_url = reverse_lazy("portfolios")
+
+
+class EditPortfolio(UpdateView):
+    form_class = PortfolioForm
+    model = Portfolio
+    template_name = "add_portfolio.html"
+    success_url = reverse_lazy("portfolios")
+
+
+class DeletePortfolio(DeleteView):
+    model = Portfolio
     success_url = reverse_lazy("portfolios")

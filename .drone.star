@@ -14,7 +14,7 @@ def services(ctx):
     ]
 
 def main(ctx):
-    name = "test_pipeline_to_try_a_trial"
+    name = "publish_pipeline"
     return [
         {
         "kind": "pipeline",
@@ -29,14 +29,18 @@ def main(ctx):
             "branch": {
                         "include": ["master"]
             },
-            "event": ["push"],
+            "event": ["push", "pull_request"],
         },
         "steps": [
             {
-                "name": "a test step",
-                "image": "madwaks/ops-tools:sqlite",
-                "entrypoint": ["sqlite3 /var/lib/drone/database.sqlite"],
-                "commands": [".tables", ".schema"],
+                "name": "publish image",
+                "image": "plugins/docker",
+                "settings": {
+                    "username": {"from_secret": "DOCKER_USERNAME"},
+                    "password": {"from_secret": "DOCKER_PASSWORD"},
+                    "repo": "tradingboard",
+                    "tags": "test_tag"
+                }
                 "when": {
                     "branch": ["master", "develop"],
                 },
