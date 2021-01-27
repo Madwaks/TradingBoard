@@ -16,13 +16,7 @@ urlpatterns = [
     path("portfolios/", PortfolioListView.as_view(), name="portfolios"),
     path("add-portfolio/", AddPortfolio.as_view()),
     path(
-        "delete-portfolio/<int:portfolio_id>",
-        DeletePortfolio.as_view(),
-        name="delete_portfolio",
+        "delete-portfolio/<int:pk>", DeletePortfolio.as_view(), name="delete_portfolio"
     ),
-    path(
-        "edit-portfolio/<int:portfolio_id>",
-        EditPortfolio.as_view(),
-        name="edit_portfolio",
-    ),
+    path("edit-portfolio/<int:pk>", EditPortfolio.as_view(), name="edit_portfolio"),
 ]

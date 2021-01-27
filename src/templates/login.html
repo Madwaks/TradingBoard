@@ -1,107 +1,215 @@
 <!DOCTYPE html>
 {% load widget_tweaks %}
+{% load static %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title></title>
     <style media="screen">
-      body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    /*background: linear-gradient(to right, #b92b27, #1565c0)*/
-    background: #191919;
+
+body {
+  background: #1D2A3A; /* fallback for old browsers */
+  font-family: "Poppins", sans-serif;
+  color: #B3AFB3;
+}
+p {
+text-align: left;
+font: normal normal medium 20px/30px Poppins;
+letter-spacing: 0px;
+color: #B3AFB3;
+opacity: 1;
 }
 
-.box {
-    width: 500px;
-    padding: 40px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background: #191919;
-    text-align: center;
-    transition: 0.25s;
-    margin-top: 100px
+a {
+  color: #B3AFB3;
+  font-weight: 600;
+  font-size: 0.85em;
+  text-decoration: none;
+}
+label {
+  text-align: left;
+  font-size: 0.85em;
+  letter-spacing: 0px;
+  color: #B3AFB3;
+  opacity: 1;
+}
+input:focus {
+  outline: none;
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.form {
+  align-items: center;
+  width: auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 25px;
+  box-shadow: 0px 10px 25px 5px #0000000f;
 }
 
-.box input[type="text"],
-.box input[type="password"] {
-    border: 0;
-    background: none;
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    border: 2px solid #3498db;
-    padding: 10px 10px;
-    width: 250px;
-    outline: none;
-    color: white;
-    border-radius: 24px;
-    transition: 0.25s
+.sign-in-section h6 {
+  margin-top: 0px;
+  font-size: 0.75em;
+}
+.sign-in-section h1 {
+  text-align: center;
+  font-weight: 700;
+  position: relative;
+}
+.sign-in-section h1:after {
+  position: absolute;
+  content: "";
+  height: 5px;
+  bottom: -15px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: 40px;
+  background: #7F00FF;
+  background: -webkit-linear-gradient(to right, #E100FF, #7F00FF);
+  background: linear-gradient(to right, #E100FF, #7F00FF);
+  -o-transition: 0.25s;
+  -ms-transition: 0.25s;
+  -moz-transition: 0.25s;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+}
+.sign-in-section h1:hover:after {
+  width: 100px;
+}
+.sign-in-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+.sign-in-section ul > li {
+  display: inline-block;
+  padding: 10px;
+  font-size: 15px;
+  width: 20px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  border-radius: 50%;
+  box-shadow: 0px 3px 1px #0000000f;
+  border: 1px solid #e2e2e2;
+}
+.sign-in-section p {
+  text-align: center;
+  font-size: 0.85em;
+}
+.form-field {
+  display: block;
+  width: 300px;
+  margin: 10px auto;
+}
+.form-field label {
+  display: block;
+  margin-bottom: 10px;
+}
+.form-field input[type="email"],
+input[type="password"] {
+  width: -webkit-fill-available;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #e8e8e8;
+}
+.form-field input::placeholder {
+  color: #e8e8e8;
+}
+.form-field input:focus {
+  border: 1px solid #F4244C;
+}
+.form-field input[type="checkbox"] {
+  display: inline-block;
+}
+.form-options {
+  display: block;
+  margin: auto;
+  width: 300px;
+}
+.checkbox-field {
+  display: inline-block;
+  float: left;
+}
+.form-options a {
+  float: right;
+  text-decoration: none;
+}
+.btn {
+  padding: 15px;
+  font-size: 1em;
+  width: 100%;
+  border-radius: 25px;
+  border: none;
+  margin: 20px 0px;
+}
+.btn-signin {
+  cursor: pointer;
+  background: #F4244C;
+  color: #ffffff;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 32px;
+  opacity: 1;
+}
+.links a:nth-child(1) {
+  float: left;
+}
+.links a:nth-child(2) {
+  float: right;
 }
 
-.box h1 {
-    color: white;
-    text-transform: uppercase;
-    font-weight: 500
-}
-
-.box input[type="text"]:focus,
-.box input[type="password"]:focus {
-    width: 300px;
-    border-color: #2ecc71
-}
-
-.box input[type="submit"] {
-    border: 0;
-    background: none;
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    border: 2px solid #2ecc71;
-    padding: 14px 40px;
-    outline: none;
-    color: white;
-    border-radius: 24px;
-    transition: 0.25s;
-    cursor: pointer
-}
-
-.box input[type="submit"]:hover {
-    background: #2ecc71
-}
 
 
     </style>
   </head>
-  <body>
-    {% include "navbar.html" %}
-    <div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <form class="box" method="post">
-                    {% csrf_token %}
-                    <h1>Login</h1>
-                    <div class="alert alert-danger" role="alert" style="background: inherit">
-                        {% for error in form.non_field_errors %}
-                          <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                    <p class="text-muted"> Please enter your login and password!</p>
-
-                     {% render_field form.username class="form-control" placeholder="Username" %}
-                     {% render_field form.password class="form-control" placeholder="Password" %}
-
-                     <input type="submit" name="" value="Login">
-
-                </form>
-            </div>
-        </div>
+<body >
+<div class="container">
+  <div class="form">
+    <div style="text-align: center">
+        <img src="{% static 'image/logo@2x.png' %}" style="width: 50%"  alt=""/>
     </div>
-</div>
+    <div class="sign-in-section">
 
-{% include "footer.html" %}
-  </body>
+      <form method="post">
+          {% csrf_token %}
+<!--          {% if form.non_field_errors %}-->
+<!--        <div class="alert alert-danger" role="alert" style="background: inherit">-->
+<!--            {% for error in form.non_field_errors %}-->
+<!--              <span>{{ error }}</span>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--        {% endif %}-->
+        <div class="form-field">
+          <label>Adresse email</label>
+          {% render_field form.username class="form-field" placeholder="Email" type="email" %}
+        </div>
+        <div class="form-field">
+          <label>Mot de passe</label>
+             {% render_field form.password class="form-field" placeholder="Password" type="password" %}
+        </div>
+
+
+        <div class="form-field">
+          <input type="submit" class="btn btn-signin" value="Connexion" />
+        </div>
+        <div class="form-options">
+          <div class="checkbox-field">
+            <input id="rememberMe" type="checkbox" class="checkbox" />
+            <label for="rememberMe">Se souvenir</label>
+          </div>
+          <a href="#">Mot de passe oublié</a>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+</body>
 </html>

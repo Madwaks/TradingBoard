@@ -38,10 +38,11 @@ class AddPortfolio(CreateView):
 class EditPortfolio(UpdateView):
     form_class = PortfolioForm
     model = Portfolio
-    template_name = "add_portfolio.html"
     success_url = reverse_lazy("portfolios")
+    template_name = "update_portfolio.html"
 
 
 class DeletePortfolio(DeleteView):
     model = Portfolio
     success_url = reverse_lazy("portfolios")
+    template_name = "portfolio_confirm_delete.html"
