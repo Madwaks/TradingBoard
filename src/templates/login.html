@@ -51,33 +51,6 @@ input:focus {
   box-shadow: 0px 10px 25px 5px #0000000f;
 }
 
-.sign-in-section h6 {
-  margin-top: 0px;
-  font-size: 0.75em;
-}
-.sign-in-section h1 {
-  text-align: center;
-  font-weight: 700;
-  position: relative;
-}
-.sign-in-section h1:after {
-  position: absolute;
-  content: "";
-  height: 5px;
-  bottom: -15px;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  width: 40px;
-  background: #7F00FF;
-  background: -webkit-linear-gradient(to right, #E100FF, #7F00FF);
-  background: linear-gradient(to right, #E100FF, #7F00FF);
-  -o-transition: 0.25s;
-  -ms-transition: 0.25s;
-  -moz-transition: 0.25s;
-  -webkit-transition: 0.25s;
-  transition: 0.25s;
-}
 .sign-in-section h1:hover:after {
   width: 100px;
 }
@@ -133,29 +106,19 @@ input[type="password"] {
   margin: auto;
   width: 300px;
 }
-.checkbox-field {
-  display: inline-block;
-  float: left;
-}
-.form-options a {
-  float: right;
-  text-decoration: none;
-}
+
 .btn {
-  padding: 15px;
-  font-size: 1em;
-  width: 100%;
-  border-radius: 25px;
-  border: none;
-  margin: 20px 0px;
-}
-.btn-signin {
   cursor: pointer;
   background: #F4244C;
   color: #ffffff;
-  box-shadow: 0px 3px 6px #00000029;
+  box-shadow: 0 3px 6px #00000029;
   border-radius: 32px;
   opacity: 1;
+    padding: 15px;
+  font-size: 1em;
+  width: 100%;
+  border: none;
+  margin: 10px 0;
 }
 .links a:nth-child(1) {
   float: left;
@@ -191,25 +154,26 @@ input[type="password"] {
         </div>
         <div class="form-field">
           <label>Mot de passe</label>
-             {% render_field form.password class="form-field" placeholder="Password" type="password" %}
+             {% render_field form.password class="form-field" placeholder="Mot de passe" type="password" %}
         </div>
+        </form>
+    </div>
 
-
-        <div class="form-field">
-          <input type="submit" class="btn btn-signin" value="Connexion" />
-        </div>
         <div class="form-options">
-          <div class="checkbox-field">
+          <div class="checkbox-field" style="margin-bottom: 10px">
             <input id="rememberMe" type="checkbox" class="checkbox" />
             <label for="rememberMe">Se souvenir</label>
           </div>
-          <a href="#">Mot de passe oublié</a>
+        </div>
+      <button type="submit" class="btn" value="Connexion">Connection</button>
+      <button type="submit" class="btn">Create an account</button>
+        <div style="text-align: center">
+          <a href="/resetpassword">Mot de passe oublié ?</a>
+
         </div>
 
-      </form>
 
     </div>
   </div>
-</div>
 </body>
 </html>
