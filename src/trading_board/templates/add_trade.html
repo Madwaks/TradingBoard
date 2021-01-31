@@ -1,0 +1,44 @@
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      a:link {
+            text-decoration: none;
+          }
+
+  </style>
+</head>
+<body>
+    <h2 style="text-align:center; color:blue;">ADD TRADE</h2>
+    <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0;">
+        {%csrf_token%}
+        <div class="form-group">
+          <label for="date">Date</label>
+          {% render_field form.date class="form-control" placeholder="Date" %}
+
+          <label for="type">Sens</label>
+          {% render_field form.type class="form-control" placeholder="10" %}
+          <label for="open_price">Prix d'achat</label>
+          {% render_field form.open_price class="form-control" placeholder="10" %}
+          <label for="close_price">Prix de vente</label>
+          {% render_field form.close_price class="form-control" placeholder="10" %}
+          <label for="portfolio">Portfolio</label>
+          {% render_field form.portfolio class="form-control" placeholder="10" %}
+          <label for="volume">Volume</label>
+          {% render_field form.volume class="form-control" placeholder="10" %}
+
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">ADD</button>
+      </form>
+</body>
+</html>

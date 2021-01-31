@@ -19,11 +19,11 @@ class Trade(models.Model):
         max_length=128, choices=TradeType.choices(), blank=False, null=False
     )
     open_price = models.FloatField(default=0.0)
-    close_price = models.FloatField(default=0.0)
-
+    close_price = models.FloatField(default=0.0, null=True)
     portfolio = models.ForeignKey(
         "Portfolio", on_delete=SET_NULL, related_name="trades", null=True
     )
+    volume = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.date)

@@ -7,12 +7,14 @@ from trading_board.views.portfolio import (
     EditPortfolio,
     DeletePortfolio,
 )
+from trading_board.views.trade import AddTrade
 from trading_board.views.trade_list import TradeListView
 
 
 urlpatterns = [
     path("", TradingBoardHome.as_view()),
-    path("trades/", TradeListView.as_view()),
+    path("trades/", TradeListView.as_view(), name="trades"),
+    path("add-trade/", AddTrade.as_view()),
     path("portfolios/", PortfolioListView.as_view(), name="portfolios"),
     path("add-portfolio/", AddPortfolio.as_view()),
     path(

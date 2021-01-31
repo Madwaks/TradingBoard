@@ -1,33 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Portfolios</title>
-    </head>
-    <body>
-        <h1>Trades</h1>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Sens</th>
-                <th>Prix d'achat</th>
-                <th>Prix de vente</th>
-                <th>Portfolio</th>
-            </tr>
-            {% for trade in object_list %}
-            <tr>
-                <td>{{ trade.date }}</td>
-                <td>{{ trade.type }}</td>
-                <td>{{ trade.open_price }}</td>
-                <td>{{ trade.close_price }}</td>
-                <td><a href="/portfolio/{{ trade.portfolio.pk }}/">{{ trade.portfolio.name }}</a></td>
-            </tr>
-            {% endfor %}
-        </table>
-        <form action="/your-name/" method="post">
-            <label for="your_name">Your name: </label>
-            <input id="your_name" type="date" name="your_name" value="{{ current_name }}">
-            <input type="submit" value="Save">
-        </form>
-    </body>
-</html>
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <style type="text/css">
+      a:link {
+        text-decoration: none;
+      }
+
+      .order-card {
+        color: rgb(255, 255, 255);
+      }
+
+      .bg-c-blue {
+        background: #04868f;
+      }
+
+      .bg-c-green {
+        background:#4C51BF;
+      }
+
+      .bg-c-yellow {
+        background: #F56565;
+      }
+
+      .bg-c-pink {
+        background: #663a30;
+      }
+
+
+      .card {
+
+        -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+        box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+        border: 1px solid black;
+        -webkit-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        width: 50%;
+        display: flex;
+        flex-direction: inherit;
+          margin-left: auto;
+          justify-content: space-evenly;
+    align-items: center;
+      }
+
+      .card .card-block {
+        padding: 25px;
+      }
+
+      .order-card i {
+        font-size: 26px;
+      }
+
+      .f-left {
+        float: left;
+        margin-left: 20px;
+
+      }
+
+      .f-right {
+        float: right;
+        margin-right: 20px;
+      }
+      header {
+      left: 0px;
+      right: 0px;
+    }
+      .field-value {
+          text-align: center;
+      }
+      .action {
+            margin-right: auto;
+    margin-left: 10px;
+      }
+    </style>
+  </head>
+<script>
+function goToAdd() {
+  window.location.href = "/tradingboard/add-portfolio";
+}
+</script>
+<div class="text-center">
+        <h1>Mes portefeuilles</h1>
+    <div>
+            <button onclick="goToAdd()">ADD</button>
+    </div>
+</div>
+<div style="align-items: center; display: flex; margin-top: 30px;">
+    {% for portfolio in object_list %}
+    <div class="card bg-c-blue">
+            <div class="column">
+                <div>Name</div>
+                <div class="field-value">{{ portfolio.name }}</div>
+            </div>
+
+            <div class="column">
+                <div>Amount</div>
+                <div class="field-value">{{ portfolio.amount }}</div>
+            </div>
+            <div class="column">
+                <div>Trade history</div>
+                <a class="field-value" href="/tradingboard/tradehistory" style="color: #cccccc">history</a>
+            </div>
+
+    </div>
+    <div class="action">
+        <a class="edit" title="Edit" data-toggle="tooltip" href="{% url 'edit_portfolio' portfolio.pk %}">Edit</a>
+        <a class="delete" title="Delete" data-toggle="tooltip" href="{% url 'delete_portfolio' portfolio.pk%}">Delete</a>
+    </div>
+    {% endfor %}
+</div>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+{% endblock content %}
