@@ -27,6 +27,7 @@ class DriverManager:
     @inject
     def __init__(self, configuration: Configuration):
         self._config = configuration
+        self.download_path = Path(self._config.download_path)
 
     @LazyProperty
     def driver(self) -> WebDriver:

@@ -132,4 +132,4 @@ CHROME_DRIVER_PATH = os.getenv(
 
 # DATA PATHS
 
-COMPANIES_JSON_PATH = Path("static/data/companies_with_sector2.json")
+COMPANIES_JSON_PATH = Path("static/data/companies/test.json")

@@ -14,4 +14,4 @@ class Command(BaseCommand):
         from data.utils.store_data.companies import CompanyStorer
 
         storer = provide(CompanyStorer)
-        storer.store_data_into_django()
+        storer.store_companies()

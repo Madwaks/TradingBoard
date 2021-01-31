@@ -23,7 +23,7 @@ class CompanyStorer:
     def __init__(self, config: Configuration):
         self._raw_companies = config.companies_json_path
 
-    def store_data_into_django(self):
+    def store_companies(self):
         with open(self._raw_companies, "r") as f:
             list_info = json.load(f)
 

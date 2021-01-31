@@ -28,7 +28,7 @@ class QuotationStorer:
             if company.quote.exists():
                 logger.info(f"[QUOTATIONS] for company <{company.name}> already exists")
             else:
-                list_quotations = self._extract_from_file(company.local_file_path)
+                list_quotations = self._extract_from_file(company.quotes_file_path)
                 logger.info(f"[STORING COMPANY] <{company.name}> 's quotations ")
                 for quote in list_quotations:
                     try:
