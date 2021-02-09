@@ -39,26 +39,23 @@ class CompanyStorer:
 
     def _build_company(self, infos: dict[str, Any]) -> Company:
         comp = self._create_company_from_info(infos)
-        urls = self._create_url_infos(infos)
+        urls = self._create_company_infos(infos)
         comp.info = urls
         comp.save()
         return comp
 
     def _create_company_from_info(self, infos: dict[str, Any]) -> Company:
-        comp = Company(
-            name=infos["name"],
-            symbol=infos["symbol"],
-            quotes_file_path=infos["local_file_path"],
-            sector=infos["sector"],
-            sub_sector=infos["sub_sector"],
-        )
+        comp = Company(name=infos["name"], symbol=infos["symbol"])
         return comp
 
-    def _create_url_infos(self, infos: dict[str, Any]) -> CompanyInfo:
+    def _create_company_infos(self, infos: dict[str, Any]) -> CompanyInfo:
         info_urls = CompanyInfo(
             bourso_url=infos["bourso_url"],
             bfm_url=infos["bfm_url"],
             yahoo_url=infos["yahoo_url"],
+            quotes_file_path=infos["local_file_path"],
+            sector=infos["sector"],
+            sub_sector=infos["sub_sector"],
         )
         info_urls.save()
         return info_urls

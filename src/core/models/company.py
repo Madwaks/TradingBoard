@@ -4,8 +4,8 @@ from django.db import models
 
 
 class Company(models.Model):
-    name = models.CharField(max_length=128)
-    symbol = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, null=False, blank=False)
+    symbol = models.CharField(max_length=128, null=False, blank=False)
 
     info = models.OneToOneField(
         "CompanyInfo",
@@ -31,7 +31,7 @@ class Company(models.Model):
 
     @property
     def last_dated_quotation(self) -> str:
-        quotation_date = self.quotation.latest("date").date
+        quotation_date = self.quotes.latest("date").date
         return quotation_date
 
     @property
