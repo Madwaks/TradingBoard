@@ -19,12 +19,12 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView
 from django.urls import path, include
 
-import trading_board.urls
-from trading_board.views.home import Home
+import core.urls
+from core.views.home import Home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("tradingboard/", include(trading_board.urls)),
+    path("tradingboard/", include(core.urls)),
     path("", Home.as_view(), name="home"),
     path("login", LoginView.as_view(template_name="login.html"), name="login"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

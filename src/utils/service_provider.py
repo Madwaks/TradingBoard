@@ -10,7 +10,7 @@ _injector: Optional[Injector] = None
 
 
 def _configure_company_storer(binder: Binder, settings):
-    from data.utils.store_data.companies import CompanyStorer
+    from core.utils.store_data.companies import CompanyStorer
 
     binder.bind(
         CompanyStorer.Configuration,
@@ -19,7 +19,7 @@ def _configure_company_storer(binder: Binder, settings):
 
 
 def _configure_data_downloader(binder: Binder, settings):
-    from data.utils.driver_manager.driver import DriverManager
+    from core.utils.driver_manager.driver import DriverManager
 
     binder.bind(
         DriverManager.Configuration,

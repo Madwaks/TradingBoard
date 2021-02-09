@@ -14,7 +14,7 @@ class Indicator(models.Model):
     )
 
     quote = models.ForeignKey(
-        "data.Quote",
+        "core.Quote",
         related_name="indicators",
         on_delete=models.SET_NULL,
         null=True,
