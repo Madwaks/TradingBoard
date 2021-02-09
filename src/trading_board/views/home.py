@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 
-from trading_board.models import Portfolio, Trade
+from data.models.portfolio import Portfolio
+from data.models.trade import Trade
 
 
 class Home(TemplateView):

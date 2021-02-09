@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from trading_board.models import Portfolio
+from data.models.portfolio import Portfolio
 
 
 class PortfolioForm(ModelForm):

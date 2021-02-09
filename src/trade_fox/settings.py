@@ -33,7 +33,11 @@ ALLOWED_HOSTS = ["51.68.230.72", "hosoda.tradefox.tech", "tradefox.tech", "127.0
 
 # Application definition
 
-LOCAL_APPS = ["trading_board.apps.TradingBoardConfig", "data.apps.DataConfig"]
+LOCAL_APPS = [
+    "data.apps.DataConfig",
+    "trading_board.apps.TradingBoardConfig",
+    "decision_maker.apps.DecisionMakerConfig",
+]
 
 INSTALLED_APPS = [
     *LOCAL_APPS,
