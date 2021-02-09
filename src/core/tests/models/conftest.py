@@ -1,9 +1,9 @@
 from pathlib import Path
+from typing import Union
 
 import pytest
 
-from core.utils.store_data.companies import CompanyStorer
-from utils.service_provider import provide
+from core.models import Company, CompanyInfo
 
 
 @pytest.fixture(scope="module")
@@ -12,7 +12,10 @@ def path_to_test():
 
 
 @pytest.fixture(scope="module")
-def company_storer(path_to_test: Path) -> CompanyStorer:
-    comp_st = provide(CompanyStorer)
-    comp_st._raw_companies = path_to_test
-    return comp_st
+def company(path_to_test: Union[Path, str]) -> Company:
+    return Company(name="Tradefox", symbol="ALTR")
+
+
+@pytest.fixture(scope="module")
+def empty_company_info() -> CompanyInfo:
+    return CompanyInfo()

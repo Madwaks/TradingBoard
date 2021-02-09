@@ -6,8 +6,8 @@ from typing import List, Dict, Tuple
 
 from bs4 import BeautifulSoup
 
-from src.stocks_downloader.utils.driver.driver_manager import DriverManager
-from src.stocks_downloader.utils.utils_urls import TRADING_SAT_COMP
+from core.utils.driver_manager.driver import DriverManager
+from trade_fox.settings import TRADING_SAT_COMP
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

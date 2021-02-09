@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from injector import singleton, inject
 
-from core.models import Company, CompanyInfoUrl
+from core.models import Company, CompanyInfo
 
 logger = logging.getLogger("django")
 
@@ -40,7 +40,7 @@ class CompanyStorer:
     def _build_company(self, infos: dict[str, Any]) -> Company:
         comp = self._create_company_from_info(infos)
         urls = self._create_url_infos(infos)
-        comp.info_url = urls
+        comp.info = urls
         comp.save()
         return comp
 
@@ -54,8 +54,8 @@ class CompanyStorer:
         )
         return comp
 
-    def _create_url_infos(self, infos: dict[str, Any]) -> CompanyInfoUrl:
-        info_urls = CompanyInfoUrl(
+    def _create_url_infos(self, infos: dict[str, Any]) -> CompanyInfo:
+        info_urls = CompanyInfo(
             bourso_url=infos["bourso_url"],
             bfm_url=infos["bfm_url"],
             yahoo_url=infos["yahoo_url"],

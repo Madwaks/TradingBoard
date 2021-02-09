@@ -137,3 +137,7 @@ CHROME_DRIVER_PATH = os.getenv(
 # DATA PATHS
 
 COMPANIES_JSON_PATH = Path("static/data/companies/test.json")
+
+TRADING_SAT_COMP = "https://www.tradingsat.com/"
+YAHOO_FINANCE = "https://finance.yahoo.com"
+BING = "https://www.bing.com"

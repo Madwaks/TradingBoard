@@ -15,7 +15,7 @@ logger = logging.getLogger("django")
 @singleton
 class MissingQuoteDownloader:
     def get_last_quotations(self, company: Company) -> Optional[List[Dict]]:
-        if not company.info_url.yahoo_url:
+        if not company.info.yahoo_url:
             return None
 
         all_lines = self._get_missing_data(company)
@@ -29,7 +29,7 @@ class MissingQuoteDownloader:
 
     @staticmethod
     def _get_yahoo_history_url(company: Company) -> Tuple[str, str]:
-        url = company.info_url.yahoo_url.replace("//fr.", "//") + "/history"
+        url = company.info.yahoo_url.replace("//fr.", "//") + "/history"
 
         req_url = requests.get(url)
 

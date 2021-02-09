@@ -27,10 +27,10 @@ class QuotationDownloader:
                 logging.info(f"[ALREADY DOWNLOADED] <{company.symbol}>")
                 continue
 
-            self._driver_manager.driver.get(company.info_url.bourso_url)
+            self._driver_manager.driver.get(company.info.bourso_url)
             self._download_quotation()
 
-            logging.info(f"[DOWNLOAD] <{company.info_url.bourso_url}> downloaded")
+            logging.info(f"[DOWNLOAD] <{company.info.bourso_url}> downloaded")
 
             self._update_company_local_file_path(company)
 
