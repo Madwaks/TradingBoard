@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 
 from django.db import models
 
@@ -30,10 +31,17 @@ class Company(models.Model):
         return self.name
 
     @property
-    def last_dated_quotation(self) -> str:
-        quotation_date = self.quotes.latest("date").date
-        return quotation_date
+    def last_dated_quotation(self) -> Optional[str]:
+        return self.quotes.latest("date").date if self.quotes.exists() else None
 
     @property
     def is_up_to_date(self) -> bool:
         return self.last_dated_quotation == date.today().strftime("%m-%d-%Y")
+
+    def save(self, **kwargs):
+        info = self.info
+        if info and info.pk is None:
+            info.save()
+        self.info = info
+
+        super().save(**kwargs)
