@@ -1,8 +1,19 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Indicator(models.Model):
-    name = models.CharField(max_length=128, null=True)
+    class AvailableIndicators(models.TextChoices):
+        MM7 = "MM7", _("Moyenne mobile 7")
+        MM20 = "MM20", _("Moyenne mobile 20")
+        MM50 = "MM50", _("Moyenne mobile 50")
+        MM100 = "MM100", _("Moyenne mobile 100")
+        MM200 = "MM200", _("Moyenne mobile 200")
+
+    name = models.CharField(
+        max_length=128, choices=AvailableIndicators.choices, null=True
+    )
+
     value = models.FloatField(null=True)
 
     state = models.OneToOneField(
@@ -38,6 +49,13 @@ class Indicator(models.Model):
 
     def __hash__(self):
         return hash(str(self.pk) + self.name)
+
+    def clean_fields(self, exclude=None):
+        breakpoint()
+
+    def save(self, **kwargs):
+        self.full_clean()
+        super().save(**kwargs)
 
     class Meta:
         ordering = ("name",)
