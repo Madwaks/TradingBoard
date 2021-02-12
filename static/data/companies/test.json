@@ -4,7 +4,6 @@
         "symbol": "ALMIL",
         "sector": "Communication Services",
         "sub_sector": "Advertising Agencies",
-        "local_file_path": "static/data/stored_quotations/1000MERCIS_2020-05-16.txt",
         "yahoo_url": "https://finance.yahoo.com/quote/ALMIL.PA",
         "bourso_url": "https://www.boursorama.com/cours/1rEPALMIL",
         "bfm_url": "https://www.tradingsat.com/1000mercis-FR0010285965/"
@@ -14,7 +13,6 @@
         "symbol": "2CRSI",
         "sector": "Technology",
         "sub_sector": "Computer Hardware",
-        "local_file_path": "static/data/stored_quotations/2CRSI_2020-05-16.txt",
         "yahoo_url": "https://finance.yahoo.com/quote/2CRSI.PA",
         "bourso_url": "https://www.boursorama.com/cours/1rP2CRSI",
         "bfm_url": "https://www.tradingsat.com/2crsi-FR0013341781/"
@@ -24,9 +22,8 @@
         "symbol": "AI",
         "sector": "Basic Materials",
         "sub_sector": "Chemicals",
-        "local_file_path": "static/data/stored_quotations/AGTARECORDI_2020-05-16.txt",
         "yahoo_url": "https://finance.yahoo.com/quote/AI.PA",
-        "bourso_url": "https://www.boursorama.com/cours/AI",
+        "bourso_url": "https://www.boursorama.com/cours/1rPAI/",
         "bfm_url": "https://www.tradingsat.com/air-liquide-FR0000120073/"
     }
 ]

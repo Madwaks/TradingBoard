@@ -23,7 +23,7 @@ class QuotationDownloader:
         logging.info(f"{len(companies)} EXISTING COMPANIES")
 
         for company in tqdm(companies):
-            if company.quotes_file_path and not force_download:
+            if company.info.quotes_file_path and not force_download:
                 logging.info(f"[ALREADY DOWNLOADED] <{company.symbol}>")
                 continue
 
@@ -41,8 +41,8 @@ class QuotationDownloader:
             str((self._driver_manager.download_path / "*").absolute())
         )
         latest_file = max(list_of_files, key=os.path.getctime)
-        company.quotes_file_path = latest_file
-        company.save()
+        company.info.quotes_file_path = latest_file
+        company.info.save()
 
     def _download_quotation(self):
         full_screen = self._driver_manager.driver.find_element_by_id("fullscreen_btn")

@@ -1,7 +1,12 @@
 from django.db import models
 
+from core.managers.quotes import QuoteManager
+
 
 class Quote(models.Model):
+
+    objects = QuoteManager()
+
     date = models.DateField()
     open = models.FloatField(max_length=128, verbose_name="open_price")
     close = models.FloatField(max_length=128, verbose_name="close_price")

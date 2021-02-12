@@ -10,7 +10,6 @@ from core.views.portfolio import (
 from core.views.trade import AddTrade
 from core.views.trade_list import TradeListView
 
-
 urlpatterns = [
     path("", TradingBoardHome.as_view()),
     path("trades/", TradeListView.as_view(), name="trades"),

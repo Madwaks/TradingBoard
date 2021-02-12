@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
     "widget_tweaks",
 ]
 
@@ -131,7 +132,7 @@ STATIC_URL = "/static/"
 
 DOWNLOAD_STOCKS_PATH = os.getenv("DOWNLOAD_STOCKS_PATH", "static/data/quotes")
 CHROME_DRIVER_PATH = os.getenv(
-    "CHROME_DRIVER_PATH", "src/data/utils/driver_manager/chromedriver"
+    "CHROME_DRIVER_PATH", "src/core/utils/driver_manager/chromedriver"
 )
 
 # DATA PATHS

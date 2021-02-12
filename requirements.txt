@@ -4,15 +4,14 @@ django==3.1.5
 django-rest-swagger
 djangorestframework==3.11.1
 drf-yasg
-django-extensions
 django-annoying
-dateparser~=1.0.0
-requests~=2.25.1
-injector~=0.18.4
-selenium~=3.141.0
-bs4~=0.0.1
+dateparser==1.0.0
+requests==2.25.1
+injector==0.18.4
+selenium==3.141.0
+bs4==0.0.1
 lazy-property==0.0.1
-pandas~=1.2.0
+pandas==1.2.0
 psycopg2-binary==2.8.4
 IPython
 jupyter
@@ -21,3 +20,4 @@ pytest-django==4.1.0
 tqdm==4.56.0
 beautifulsoup4==4.9.3
 factory-boy==2.12.0
+django-extensions==3.1.0

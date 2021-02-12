@@ -21,6 +21,9 @@ class Indicator(models.Model):
         blank=True,
     )
 
+    def __str__(self) -> str:
+        return f"{str(self.quote)} {str(self.name)}"
+
     def __add__(self, other):
         return self.value + other.value
 

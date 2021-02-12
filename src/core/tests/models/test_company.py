@@ -1,9 +1,8 @@
 import pytest
+from pytest_factoryboy import register
 
 from core.models import Company, CompanyInfo
 from core.tests.factories.company import CompanyFactory
-from pytest_factoryboy import register
-
 from core.tests.factories.company_info import CompanyInfoFactory
 
 register(CompanyInfoFactory)

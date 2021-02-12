@@ -1,8 +1,8 @@
 from typing import Type, Optional
-from django.conf import settings
-from injector import Injector, Binder
 from typing import TypeVar
 
+from django.conf import settings
+from injector import Injector, Binder
 
 T = TypeVar("T")
 

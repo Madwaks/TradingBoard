@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
-
 from injector import singleton, inject
 
 from core.models import Company, CompanyInfo
@@ -53,11 +52,10 @@ class CompanyStorer:
             bourso_url=infos["bourso_url"],
             bfm_url=infos["bfm_url"],
             yahoo_url=infos["yahoo_url"],
-            quotes_file_path=infos["local_file_path"],
+            quotes_file_path=infos.get("local_file_path"),
             sector=infos["sector"],
             sub_sector=infos["sub_sector"],
         )
-        info_urls.save()
         return info_urls
 
     def update_company_fields(self):

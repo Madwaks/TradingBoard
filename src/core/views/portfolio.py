@@ -8,8 +8,8 @@ from django.views.generic import (
     DeleteView,
 )
 
-from core.models.portfolio import Portfolio
 from core.forms.portfolio import PortfolioForm
+from core.models.portfolio import Portfolio
 
 
 class PortfolioListView(ListView):

@@ -12,7 +12,6 @@ from tqdm import tqdm
 from core.models import Company, Quote
 from core.utils.download_data.quotes.update import MissingQuoteDownloader
 
-
 logger = logging.getLogger("django")
 
 
@@ -25,10 +24,10 @@ class QuotationStorer:
     def store_quotations(self):
         all_stored_companies = Company.objects.all()
         for company in tqdm(all_stored_companies):
-            if company.quote.exists():
+            if company.quotes.exists():
                 logger.info(f"[QUOTATIONS] for company <{company.name}> already exists")
             else:
-                list_quotations = self._extract_from_file(company.quotes_file_path)
+                list_quotations = self._extract_from_file(company.info.quotes_file_path)
                 logger.info(f"[STORING COMPANY] <{company.name}> 's quotations ")
                 for quote in list_quotations:
                     try:

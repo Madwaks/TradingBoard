@@ -1,13 +1,12 @@
-from injector import singleton
-
-from core.models import Company
-
 import logging
 from typing import List, Dict, Tuple, Optional, Any
 
 import dateparser
 import requests
 from bs4 import BeautifulSoup
+from injector import singleton
+
+from core.models import Company
 
 logger = logging.getLogger("django")
 
