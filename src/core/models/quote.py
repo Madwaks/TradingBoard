@@ -36,3 +36,11 @@ class Quote(models.Model):
                 fields=("date", "company"), name="unique_per_date_and_company"
             ),
         )
+
+    def save(self, **kwargs):
+        company = self.company
+        if company and company.pk is None:
+            company.save()
+        self.company = company
+
+        super().save(**kwargs)

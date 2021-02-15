@@ -1,2 +1,6 @@
 ./.idea/*
 __pycache__
+docker_env
+static/*
+coverage/*
+*.ipynb

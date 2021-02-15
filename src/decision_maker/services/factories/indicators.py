@@ -9,7 +9,7 @@ from decision_maker.utils.indicators.moving_average import simple_moving_average
 
 
 @singleton
-class IndicatorFactory:
+class DataFrameIndicatorFactory:
     def __init__(self):
         self.new_indicators_name: set = set()
 

@@ -5,13 +5,13 @@ from tqdm import tqdm
 
 from core.models import Company
 from decision_maker.models import Indicator
-from decision_maker.services.factories.indicators import IndicatorFactory
+from decision_maker.services.factories.indicators import DataFrameIndicatorFactory
 
 
 @singleton
 class IndicatorComputer:
     @inject
-    def __init__(self, indicators_factory: IndicatorFactory):
+    def __init__(self, indicators_factory: DataFrameIndicatorFactory):
         self._indicators_factory = indicators_factory
 
     def compute_indicators_for_all(self):

@@ -1,8 +1,6 @@
 import factory
 from factory import SubFactory
 from factory.fuzzy import FuzzyChoice
-
-from core.tests.factories.quotes import QuotesFactory
 from decision_maker.models import Indicator
 
 
@@ -21,4 +19,4 @@ class IndicatorFactory(factory.django.DjangoModelFactory):
         right_digits=2,
     )
 
-    quote = SubFactory(QuotesFactory)
+    quote = SubFactory("core.tests.factories.quotes.QuotesFactory")

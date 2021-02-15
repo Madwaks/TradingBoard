@@ -6,4 +6,4 @@ from core.models.position import Position
 class PositionForm(ModelForm):
     class Meta:
         model = Position
-        exclude = []
+        fields = "__all__"

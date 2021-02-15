@@ -57,3 +57,11 @@ class Indicator(models.Model):
                 fields=("name", "quote"), name="unique_per_name_and_quote"
             ),
         )
+
+    def save(self, **kwargs):
+        quote = self.quote
+        if quote and quote.pk is None:
+            quote.save()
+        self.quote = quote
+
+        super().save(**kwargs)

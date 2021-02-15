@@ -1,0 +1,38 @@
+[run]
+branch = False
+source = src/
+
+[report]
+exclude_lines =
+    pragma: no cover
+    pragma: nocover
+    pragma: no-cover
+    @abstract
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+ignore_errors = True
+include =
+    src/core/forms/*
+    src/core/managers/*
+    src/core/models/*
+    src/core/utils/*
+    src/core/views/*
+    src/decision_maker/models/*
+    src/decision_maker/services/*
+    src/decision_maker/utils/*
+omit =
+    src/core/management/*
+    src/core/migrations/*
+    src/core/templates/*
+    src/core/tests/*
+    src/decision_maker/management/*
+    src/decision_maker/migrations/*
+    src/decision_maker/forms/*
+    src/decision_maker/tests/*
+
+[xml]
+output = coverage/xml/coverage.xml
+
+[html]
+title = Tradefox Coverage
+directory = coverage/html

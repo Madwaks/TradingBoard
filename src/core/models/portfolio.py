@@ -10,4 +10,4 @@ class Portfolio(models.Model):
 
     @property
     def trade_history(self):
-        return self.trades.all().order_by("date")
+        return self.positions.all().order_by("date")
