@@ -50,13 +50,6 @@ class Indicator(models.Model):
     def __hash__(self):
         return hash(str(self.pk) + self.name)
 
-    def clean_fields(self, exclude=None):
-        breakpoint()
-
-    def save(self, **kwargs):
-        self.full_clean()
-        super().save(**kwargs)
-
     class Meta:
         ordering = ("name",)
         constraints = (

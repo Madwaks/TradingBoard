@@ -1,7 +1,8 @@
 import factory
 from factory import SubFactory
+from factory.fuzzy import FuzzyChoice
 
-from core.tests.factories.company import CompanyFactory
+from core.tests.factories.quotes import QuotesFactory
 from decision_maker.models import Indicator
 
 
@@ -10,11 +11,14 @@ class IndicatorFactory(factory.django.DjangoModelFactory):
         model = Indicator
         strategy = factory.enums.BUILD_STRATEGY
 
-    date = factory.Faker("date")
-    open = factory.Faker("random_int", min=5, max=15)
-    high = factory.Faker("random_int", min=10, max=15)
-    close = factory.Faker("random_int", min=5, max=15)
-    low = factory.Faker("random_int", min=5, max=15)
-    volume = factory.Faker("random_int", min=100, max=5000)
+    name = FuzzyChoice(Indicator.AvailableIndicators, getter=lambda c: c)
+    value = factory.Faker(
+        "pyfloat",
+        left_digits=2,
+        positive=True,
+        max_value=50,
+        min_value=2,
+        right_digits=2,
+    )
 
-    company = SubFactory(CompanyFactory)
+    quote = SubFactory(QuotesFactory)
