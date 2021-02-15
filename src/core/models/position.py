@@ -33,7 +33,7 @@ class Position(models.Model):
     )
 
     portfolio = models.ForeignKey(
-        "Portfolio",
+        "core.Portfolio",
         verbose_name="portfolio",
         related_name="positions",
         on_delete=models.CASCADE,

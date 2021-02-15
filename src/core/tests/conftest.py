@@ -1,9 +1,25 @@
 from pathlib import Path
 
 import pytest
+from pytest_factoryboy import register
 
+from core.tests.factories.company import CompanyFactory
+from core.tests.factories.company_info import CompanyInfoFactory
+from core.tests.factories.portfolio import PortfolioFactory
+from core.tests.factories.position import PositionFactory
+from core.tests.factories.quotes import QuotesFactory
 from core.utils.store_data.companies import CompanyStorer
+from decision_maker.tests.factories.indicator import IndicatorFactory
 from utils.service_provider import provide
+
+register(CompanyInfoFactory)
+register(CompanyFactory)
+register(QuotesFactory)
+register(IndicatorFactory)
+
+
+register(PositionFactory)
+register(PortfolioFactory)
 
 
 @pytest.fixture(scope="module")

@@ -25,7 +25,7 @@ class Quote(models.Model):
     )
 
     def __str__(self):
-        return self.company.name + " - " + str(self.date)
+        return f"{self.company.name} - {str(self.date)}"
 
     class Meta:
         verbose_name = "Quote"
