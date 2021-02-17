@@ -38,8 +38,10 @@ class DataFrameIndicatorFactory:
 
     def _build_indicators(self, quotes_as_dataframe: DataFrame) -> List[Indicator]:
         list_indicators = []
-        for i, row in quotes_as_dataframe.iterrows():
+        for i, row in quotes_as_dataframe.fillna(None).iterrows():
             quote = Quote.objects.get(id=row["id"])
+            breakpoint()
+            # if all([isna(row_value) ])
             for indicator_name in self.new_indicators_name:
                 if quote.indicators.filter(name=indicator_name).exists():
                     continue

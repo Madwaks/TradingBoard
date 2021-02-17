@@ -12,7 +12,6 @@ def simple_moving_average(quotes: DataFrame, period: int) -> NoReturn:
     quotation_series = Series(data=quotes.close, index=quotes.index)
     rolling_mean_name = f"MM{period}"
     quotes[rolling_mean_name] = quotation_series.rolling(window=period).mean()
-    quotes.dropna(subset=[rolling_mean_name], inplace=True)
     return rolling_mean_name
 
 

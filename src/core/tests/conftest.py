@@ -3,6 +3,9 @@ from pathlib import Path
 import pytest
 from pytest_factoryboy import register
 
+from core.forms.portfolio import PortfolioForm
+from core.forms.position import PositionForm
+from core.models import Portfolio, Position
 from core.tests.factories.company import CompanyFactory
 from core.tests.factories.company_info import CompanyInfoFactory
 from core.tests.factories.portfolio import PortfolioFactory
@@ -32,3 +35,13 @@ def company_storer(path_to_test: Path) -> CompanyStorer:
     comp_st = provide(CompanyStorer)
     comp_st._raw_companies = path_to_test
     return comp_st
+
+
+@pytest.fixture(scope="function")
+def portfolio_form(portfolio: Portfolio):
+    return PortfolioForm(data=portfolio)
+
+
+@pytest.fixture(scope="function")
+def position_form(position: Position):
+    return PositionForm(data=position)

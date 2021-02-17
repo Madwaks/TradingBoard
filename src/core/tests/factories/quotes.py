@@ -7,6 +7,7 @@ class QuotesFactory(DjangoModelFactory):
     class Meta:
         model = Quote
         strategy = enums.BUILD_STRATEGY
+        django_get_or_create = ("date", "company")
 
     date = Faker("date")
     open = Faker("random_int", min=10, max=15)
