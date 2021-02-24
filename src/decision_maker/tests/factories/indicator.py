@@ -1,6 +1,7 @@
 import factory
 from factory import SubFactory
 from factory.fuzzy import FuzzyChoice
+
 from decision_maker.models import Indicator
 
 

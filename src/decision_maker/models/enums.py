@@ -1,6 +1,9 @@
 from enum import Enum
 from typing import Union, Optional
 
+from django.db.models import TextChoices
+from django.utils.translation import gettext_lazy as _
+
 
 class EnumTrend(Enum):
     UP: str = "bullish"
@@ -21,3 +24,17 @@ class EnumTrend(Enum):
             return cls.UP
         else:
             return cls.DOWN
+
+
+class Operator(TextChoices):
+    GT = ">", _("GREATER THAN")
+    LT = "<", _("GREATER THAN")
+    LTE = "<=", _("LOWER OR EQUAL")
+    EQ = "==", _("EQUAL")
+    GTE = ">=", _("GREATER OR EQUAL")
+
+
+class Condition(TextChoices):
+    AND = "AND", _("AND")
+    OR = "OR", _("OR")
+    DISABLED = "DISABLED", _("None")

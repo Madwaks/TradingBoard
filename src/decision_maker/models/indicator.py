@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from decision_maker.managers.indicator import IndicatorManager
+
 
 class Indicator(models.Model):
     class AvailableIndicators(models.TextChoices):
@@ -10,26 +12,16 @@ class Indicator(models.Model):
         MM100 = "MM100", _("Moyenne mobile 100")
         MM200 = "MM200", _("Moyenne mobile 200")
 
+    objects = IndicatorManager()
+
     name = models.CharField(
         max_length=128, choices=AvailableIndicators.choices, null=True
     )
 
     value = models.FloatField(null=True)
 
-    state = models.OneToOneField(
-        "IndicatorState",
-        related_name="indicator",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
-
     quote = models.ForeignKey(
-        "core.Quote",
-        related_name="indicators",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        "core.Quote", related_name="indicators", on_delete=models.SET_NULL, null=True
     )
 
     def __str__(self) -> str:
@@ -48,7 +40,7 @@ class Indicator(models.Model):
         return self.value == other.value
 
     def __hash__(self):
-        return hash(str(self.pk) + self.name)
+        return hash(str(self.pk) + str(self.name))
 
     class Meta:
         ordering = ("name",)

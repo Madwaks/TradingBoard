@@ -3,6 +3,8 @@ from typing import Optional
 
 from django.db import models
 
+from core.managers.company import CompanyManager
+
 
 class Company(models.Model):
     name = models.CharField(max_length=128, null=False, blank=False)
@@ -16,6 +18,7 @@ class Company(models.Model):
         on_delete=models.SET_NULL,
         related_name="company",
     )
+    objects = CompanyManager()
 
     class Meta:
         verbose_name = "Company"
