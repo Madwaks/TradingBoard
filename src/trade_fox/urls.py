@@ -22,13 +22,14 @@ from django.urls import path, include
 
 import core.urls
 import decision_maker.urls
-from core.views.home import Home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("tradingboard/", include(core.urls)),
-    path("screener/", include(decision_maker.urls)),
-    path("", Home.as_view(), name="home"),
+    path("", include((core.urls, "core"), namespace="core")),
+    path(
+        "screener/",
+        include((decision_maker.urls, "decision_maker"), namespace="decision_maker"),
+    ),
     path("login", LoginView.as_view(template_name="login.html"), name="login"),
     path("__debug__/", include(debug_toolbar.urls)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

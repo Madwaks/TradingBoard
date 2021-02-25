@@ -1,6 +1,7 @@
 from django.urls import path
 
-from core.views.home import TradingBoardHome
+from core.views.company import CompanyList
+from core.views.home import Home
 from core.views.portfolio import (
     PortfolioListView,
     AddPortfolio,
@@ -11,7 +12,8 @@ from core.views.trade import AddTrade
 from core.views.trade_list import TradeListView
 
 urlpatterns = [
-    path("", TradingBoardHome.as_view()),
+    path("", Home.as_view()),
+    path("companies/<pk>/", CompanyList.as_view(), name="companies"),
     path("trades/", TradeListView.as_view(), name="trades"),
     path("add-trade/", AddTrade.as_view()),
     path("portfolios/", PortfolioListView.as_view(), name="portfolios"),

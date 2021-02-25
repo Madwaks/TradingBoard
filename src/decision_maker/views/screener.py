@@ -1,12 +1,19 @@
+from logging import getLogger
+
 from django.db.models.query import QuerySet
 from django.forms import Form
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.datastructures import MultiValueDict
+from django.utils.http import urlencode
 from django.views.generic import FormView
 
 from core.models import Company
 from decision_maker.forms.screener import IndicatorStateFormSet
 from decision_maker.models.enums import Condition
+
+logger = getLogger("django")
 
 
 class ScreenerSelectionView(FormView):
@@ -27,5 +34,16 @@ class ScreenerSelectionView(FormView):
                 final_companies = final_companies.intersection(solved_query)
             elif condition == Condition.OR:
                 final_companies = final_companies.union(solved_query)
-        breakpoint()
-        return redirect()
+        logger.info(final_companies)
+        return HttpResponseRedirect(
+            reverse(
+                "core:companies",
+                kwargs={"pk": [company.pk for company in final_companies]},
+            )
+        )
+        return redirect(
+            "core:companies",
+            urlencode(
+                MultiValueDict({"pk": [company.pk for company in final_companies]})
+            ),
+        )
