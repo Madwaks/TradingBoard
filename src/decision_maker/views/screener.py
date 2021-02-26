@@ -1,5 +1,5 @@
-import base64
 from logging import getLogger
+from time import time
 
 from django.db.models.query import QuerySet
 from django.forms import Form
@@ -20,6 +20,7 @@ class ScreenerSelectionView(FormView):
 
     def form_valid(self, form: Form) -> HttpResponse:
         final_companies: QuerySet = Company.objects.all()
+        start_time = time()
         for clean_data in form.cleaned_data:
             indicator1 = clean_data.get("indicator_1")
             operator = clean_data.get("operator")
@@ -32,19 +33,10 @@ class ScreenerSelectionView(FormView):
                 final_companies = final_companies.intersection(solved_query)
             elif condition == Condition.OR:
                 final_companies = final_companies.union(solved_query)
-        logger.info(final_companies)
+        logger.info(time() - start_time)
         return HttpResponseRedirect(
             reverse(
                 "core:companies",
-                kwargs={"pk": [company.pk for company in final_companies]},
+                kwargs={"pks": [company.pk for company in final_companies]},
             )
         )
-
-
-def encode_str(message: str):
-    encoded = message.encode()
-    return base64.b64encode(encoded)
-
-
-def decode_str(encoded_message: str):
-    return base64.b64decode(encoded_message).decode()

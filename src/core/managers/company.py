@@ -10,6 +10,8 @@ class CompanyManager(Manager):
         wanted_items = set()
         for company in self.all():
             quote = Quote.objects.get_last_company_quote(company)
+            breakpoint()
+
             if self._evaluate_expression(
                 quote, indicator1=indicator1, operator=operator, indicator2=indicator2
             ):

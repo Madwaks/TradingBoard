@@ -1,15 +1,11 @@
-import datetime
 import logging
-from datetime import date
-from pathlib import Path
-from typing import Union, IO, List, Dict, Any, Optional
+from typing import List, Dict, NoReturn
 
-from django.db import IntegrityError
 from injector import singleton, inject
-from pandas import Series, DataFrame, read_table
 from tqdm import tqdm
 
 from core.models import Company, Quote
+from core.services.factories.quote import QuoteFactory
 from core.utils.download_data.quotes.update import MissingQuoteDownloader
 
 logger = logging.getLogger("django")
@@ -18,8 +14,13 @@ logger = logging.getLogger("django")
 @singleton
 class QuotationStorer:
     @inject
-    def __init__(self, missing_quote_downloader: MissingQuoteDownloader):
+    def __init__(
+        self,
+        missing_quote_downloader: MissingQuoteDownloader,
+        quote_factory: QuoteFactory,
+    ):
         self._missing_quote_downloader = missing_quote_downloader
+        self._quote_factory = quote_factory
 
     def store_quotations(self):
         all_stored_companies = Company.objects.all()
@@ -27,16 +28,9 @@ class QuotationStorer:
             if company.quotes.exists():
                 logger.info(f"[QUOTATIONS] for company <{company.name}> already exists")
             else:
-                list_quotations = self._extract_from_file(company.info.quotes_file_path)
+                list_quotations = self._quote_factory.extract_from_file(company)
                 logger.info(f"[STORING COMPANY] <{company.name}> 's quotations ")
-                for quote in list_quotations:
-                    try:
-                        qu = Quote(**quote, company=company)
-                        qu.save()
-                    except IntegrityError:
-                        logger.info(
-                            f"[QUOTATION - {quote['date']}] for company <{company.name}> already exists"
-                        )
+                self._save_indicators(list_quotations)
                 logger.info(
                     f"[QUOTATIONS] for company <{company.name}> successfully created"
                 )
@@ -63,38 +57,6 @@ class QuotationStorer:
                     f"[QUOTATIONS] for company <{company.name}> already up to date"
                 )
 
-    def should_update(self, company: Company) -> bool:
-        yesterday = date.today() - datetime.timedelta(days=1)
-        last_quot_in_db = company.last_dated_quotation
-        return last_quot_in_db == datetime.date.today() or (
-            last_quot_in_db == yesterday and self._is_market_ongoing()
-        )
-
-    @staticmethod
-    def _is_market_ongoing() -> bool:
-        return 9 < datetime.datetime.now(datetime.timezone.utc).hour + 2 < 17
-
-    @staticmethod
-    def _extract_from_file(file_path: Union[str, Path, IO]) -> List[Dict[str, Any]]:
-        def parse_row(row: Series) -> Optional[Dict[str, Any]]:
-            if row["date"] == "10/11/2020 00:00":
-                return None
-            return {
-                "date": datetime.datetime.strptime(
-                    row["date"].split(" ")[0], "%d/%m/%Y"
-                ).date(),
-                "open": row["ouv"],
-                "close": row["clot"],
-                "high": row["haut"],
-                "low": row["bas"],
-                "volume": row["vol"],
-                "devise": row["devise"],
-            }
-
-        quotations: DataFrame = read_table(file_path)
-        list_quotation = quotations.apply(parse_row, axis=1).dropna().to_list()
-        return list_quotation
-
     def _store_missing_quotations(self, missing_quotations: List[Dict]):
         for quot in missing_quotations:
             try:
@@ -103,3 +65,7 @@ class QuotationStorer:
             except Exception as e:
                 logger.info(e)
                 raise (e)
+
+    @staticmethod
+    def _save_indicators(quote_list: list[Quote]) -> NoReturn:
+        Quote.objects.bulk_create(quote_list)

@@ -13,7 +13,7 @@ from core.views.trade_list import TradeListView
 
 urlpatterns = [
     path("", Home.as_view()),
-    path("companies/<pk>", CompanyList.as_view(), name="companies"),
+    path("companies/<str:pks>", CompanyList.as_view(), name="companies"),
     re_path("companies/$", CompanyList.as_view(), name="companies"),
     path("trades/", TradeListView.as_view(), name="trades"),
     path("add-trade/", AddTrade.as_view()),

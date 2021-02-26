@@ -5,8 +5,9 @@ from django.views.generic.list import ListView
 
 class FilterListView(ListView):
     def get(self, request, *args, **kwargs):
-        if kwargs.get("pk"):
-            pk_list = self._parse_pk_list(kwargs.get("pk"))
+        pks = kwargs.get("pks")
+        if pks is not None:
+            pk_list = self._parse_pk_list(pks)
             self.object_list = self.model._default_manager.filter(pk__in=pk_list)
         else:
             self.object_list = self.get_queryset()

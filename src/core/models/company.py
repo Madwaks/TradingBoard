@@ -1,9 +1,10 @@
-from datetime import date
+from datetime import date, timedelta
 from typing import Optional
 
 from django.db import models
 
 from core.managers.company import CompanyManager
+from core.utils.etc import _is_market_ongoing
 
 
 class Company(models.Model):
@@ -40,6 +41,14 @@ class Company(models.Model):
     @property
     def is_up_to_date(self) -> bool:
         return self.last_dated_quotation == date.today().strftime("%m-%d-%Y")
+
+    @property
+    def should_update(self) -> bool:
+        yesterday = date.today() - timedelta(days=1)
+        last_quot_in_db = self.last_dated_quotation
+        return last_quot_in_db == date.today() or (
+            last_quot_in_db == yesterday and _is_market_ongoing()
+        )
 
     def save(self, **kwargs):
         info = self.info
