@@ -1,12 +1,10 @@
+import base64
 from logging import getLogger
 
 from django.db.models.query import QuerySet
 from django.forms import Form
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.datastructures import MultiValueDict
-from django.utils.http import urlencode
 from django.views.generic import FormView
 
 from core.models import Company
@@ -41,9 +39,12 @@ class ScreenerSelectionView(FormView):
                 kwargs={"pk": [company.pk for company in final_companies]},
             )
         )
-        return redirect(
-            "core:companies",
-            urlencode(
-                MultiValueDict({"pk": [company.pk for company in final_companies]})
-            ),
-        )
+
+
+def encode_str(message: str):
+    encoded = message.encode()
+    return base64.b64encode(encoded)
+
+
+def decode_str(encoded_message: str):
+    return base64.b64decode(encoded_message).decode()

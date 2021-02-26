@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from core.views.company import CompanyList
 from core.views.home import Home
@@ -13,7 +13,8 @@ from core.views.trade_list import TradeListView
 
 urlpatterns = [
     path("", Home.as_view()),
-    path("companies/<pk>/", CompanyList.as_view(), name="companies"),
+    path("companies/<pk>", CompanyList.as_view(), name="companies"),
+    re_path("companies/$", CompanyList.as_view(), name="companies"),
     path("trades/", TradeListView.as_view(), name="trades"),
     path("add-trade/", AddTrade.as_view()),
     path("portfolios/", PortfolioListView.as_view(), name="portfolios"),

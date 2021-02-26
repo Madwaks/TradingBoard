@@ -1,11 +1,7 @@
-from django.views.generic import ListView
-
 from core.models import Company
+from utils.mixins.view.filter_list import FilterListView
 
 
-class CompanyList(ListView):
+class CompanyList(FilterListView):
     template_name = "company_list.html"
     model = Company
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        breakpoint()
