@@ -38,3 +38,12 @@ class Condition(TextChoices):
     AND = "AND", _("AND")
     OR = "OR", _("OR")
     DISABLED = "DISABLED", _("None")
+
+
+class AvailableIndicators(TextChoices):
+    MM7 = "MM7", _("Moyenne mobile 7")
+    MM20 = "MM20", _("Moyenne mobile 20")
+    MM50 = "MM50", _("Moyenne mobile 50")
+    MM100 = "MM100", _("Moyenne mobile 100")
+    MM200 = "MM200", _("Moyenne mobile 200")
+    PRICE = "price", _("Price")

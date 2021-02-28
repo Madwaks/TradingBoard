@@ -1,17 +1,10 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 from decision_maker.managers.indicator import IndicatorManager
+from decision_maker.models.enums import AvailableIndicators
 
 
 class Indicator(models.Model):
-    class AvailableIndicators(models.TextChoices):
-        MM7 = "MM7", _("Moyenne mobile 7")
-        MM20 = "MM20", _("Moyenne mobile 20")
-        MM50 = "MM50", _("Moyenne mobile 50")
-        MM100 = "MM100", _("Moyenne mobile 100")
-        MM200 = "MM200", _("Moyenne mobile 200")
-
     objects = IndicatorManager()
 
     name = models.CharField(

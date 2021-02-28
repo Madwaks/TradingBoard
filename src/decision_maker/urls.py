@@ -1,5 +1,5 @@
 from django.urls import path
 
-from decision_maker.views.screener import ScreenerSelectionView
+from decision_maker.views.screener import ScreenerCreate
 
-urlpatterns = [path("", ScreenerSelectionView.as_view())]
+urlpatterns = [path("", ScreenerCreate.as_view())]

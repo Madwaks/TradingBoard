@@ -20,7 +20,7 @@ class QuotationDownloader:
     def __init__(self, driver_manager: DriverManager):
         self._driver_manager = driver_manager
 
-    def download_quote_for_company(
+    def download_quotes_for_company(
         self, company: Company, force_download: bool = False
     ) -> NoReturn:
         if company.info.quotes_file_path and not force_download:
@@ -37,19 +37,8 @@ class QuotationDownloader:
     def download_quotations(self, force_download: bool = False) -> None:
         companies = Company.objects.all()
 
-        logging.info(f"{len(companies)} EXISTING COMPANIES")
-
         for company in tqdm(companies):
-            if company.info.quotes_file_path and not force_download:
-                logging.info(f"[ALREADY DOWNLOADED] <{company.symbol}>")
-                continue
-
-            self._driver_manager.driver.get(company.info.bourso_url)
-            self._download_quotation()
-
-            logging.info(f"[DOWNLOAD] <{company.info.bourso_url}> downloaded")
-
-            self._update_company_local_file_path(company)
+            self.download_quotes_for_company(company, force_download)
 
         self._driver_manager.disconnect()
 
