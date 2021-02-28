@@ -1,33 +1,33 @@
 import datetime
 from typing import Optional
 
-from injector import singleton
+from injector import singleton, inject
 from pandas import DataFrame, read_table, Series
 
 from core.models import Company, Quote
-from core.utils.models.quotes import Quote as QuoteDC
+from core.services.factories.company_info import CompanyInfoFactory
+from core.utils.models.company import Company as CompanyDC
 
 
 @singleton
-class QuoteFactory:
-    def build_quotes_from_dict(
-        self, list_dc_quotes: list[QuoteDC], company: Company
-    ) -> list[Quote]:
+class CompanyFactory:
+    @inject
+    def __init__(self, company_info_factory: CompanyInfoFactory):
+        self._company_info_factory = company_info_factory
+
+    def build_companies_from_dataclass(
+        self, list_dc_companies: list[CompanyDC]
+    ) -> list[Company]:
         return [
-            self.build_quote_from_dict(quote_dc, company) for quote_dc in list_dc_quotes
+            self.build_company_from_dataclass(company_dc)
+            for company_dc in list_dc_companies
         ]
 
-    def build_quote_from_dict(self, quote_dc: QuoteDC, company: Company) -> Quote:
-        return Quote(
-            date=datetime.datetime.strptime(
-                quote_dc.date.split(" ")[0], "%d/%m/%Y"
-            ).date(),
-            open=quote_dc.open,
-            close=quote_dc.close,
-            high=quote_dc.high,
-            low=quote_dc.low,
-            volume=quote_dc.volume,
-            company=company,
+    def build_company_from_dataclass(self, company_dc: CompanyDC) -> Company:
+        return Company(
+            name=company_dc.name,
+            symbol=company_dc.symbol,
+            info=self._company_info_factory.build_company_info(company_dc.info),
         )
 
     @staticmethod

@@ -7,13 +7,14 @@ from bs4 import BeautifulSoup
 from injector import singleton
 
 from core.models import Company
+from core.utils.models.quotes import Quote
 
 logger = logging.getLogger("django")
 
 
 @singleton
 class MissingQuoteDownloader:
-    def get_last_quotations(self, company: Company) -> Optional[List[Dict]]:
+    def get_last_quotations(self, company: Company) -> Optional[List[Quote]]:
         if not company.info.yahoo_url:
             return None
 
@@ -82,13 +83,15 @@ class MissingQuoteDownloader:
         return quotations_lines
 
     @staticmethod
-    def _parse_line(quot_dict: Dict[str, str], company: Company) -> Dict[str, Any]:
-        return {
-            "date": dateparser.parse(quot_dict["date"]),
-            "open": float(quot_dict["open"]),
-            "high": float(quot_dict["high"]),
-            "low": float(quot_dict["low"]),
-            "close": float(quot_dict["close"]),
-            "volume": 0 if quot_dict["volume"] == "-" else quot_dict["volume"],
-            "company": company,
-        }
+    def _parse_line(quot_dict: Dict[str, str], company: Company) -> Quote:
+        return Quote.from_dict(
+            {
+                "date": dateparser.parse(quot_dict["date"]),
+                "open": float(quot_dict["open"]),
+                "high": float(quot_dict["high"]),
+                "low": float(quot_dict["low"]),
+                "close": float(quot_dict["close"]),
+                "volume": 0 if quot_dict["volume"] == "-" else quot_dict["volume"],
+                "company": company,
+            }
+        )

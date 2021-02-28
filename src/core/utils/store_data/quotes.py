@@ -1,5 +1,5 @@
 import logging
-from typing import List, Dict, NoReturn
+from typing import NoReturn
 
 from injector import singleton, inject
 from tqdm import tqdm
@@ -30,14 +30,14 @@ class QuotationStorer:
             else:
                 list_quotations = self._quote_factory.extract_from_file(company)
                 logger.info(f"[STORING COMPANY] <{company.name}> 's quotations ")
-                self._save_indicators(list_quotations)
+                self._save_quotes(list_quotations)
                 logger.info(
                     f"[QUOTATIONS] for company <{company.name}> successfully created"
                 )
 
     def update_quotations(self) -> None:
         for company in Company.objects.all():
-            if self.should_update(company):
+            if not company.should_update():
                 logger.info(
                     f"[QUOTATIONS] for company <{company.name}> already up to date"
                 )
@@ -46,26 +46,12 @@ class QuotationStorer:
             missing_quotations = self._missing_quote_downloader.get_last_quotations(
                 company
             )
+            quotes = self._quote_factory.build_quotes_from_dict(
+                missing_quotations, company
+            )
 
-            if missing_quotations:
-                self._store_missing_quotations(missing_quotations)
-                logger.info(
-                    f"[QUOTATIONS]  <{company.name}> {len(missing_quotations)} rows updated"
-                )
-            else:
-                logger.info(
-                    f"[QUOTATIONS] for company <{company.name}> already up to date"
-                )
-
-    def _store_missing_quotations(self, missing_quotations: List[Dict]):
-        for quot in missing_quotations:
-            try:
-                qu = Quote(**quot)
-                qu.save()
-            except Exception as e:
-                logger.info(e)
-                raise (e)
+            self._save_quotes(quotes)
 
     @staticmethod
-    def _save_indicators(quote_list: list[Quote]) -> NoReturn:
+    def _save_quotes(quote_list: list[Quote]) -> NoReturn:
         Quote.objects.bulk_create(quote_list)

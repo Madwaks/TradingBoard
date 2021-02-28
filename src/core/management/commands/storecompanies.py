@@ -14,4 +14,4 @@ class Command(BaseCommand):
         from core.utils.store_data.companies import CompanyStorer
 
         storer = provide(CompanyStorer)
-        storer.store_companies()
+        storer.store_all_companies()

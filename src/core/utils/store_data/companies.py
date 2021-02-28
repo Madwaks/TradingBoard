@@ -2,12 +2,13 @@ import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import NoReturn
 
-from django.core.exceptions import ObjectDoesNotExist
 from injector import singleton, inject
 
-from core.models import Company, CompanyInfo
+from core.models import Company
+from core.services.factories.company import CompanyFactory
+from core.utils.models.company import Company as CompanyDC
 
 logger = logging.getLogger("django")
 
@@ -19,58 +20,28 @@ class CompanyStorer:
         companies_json_path: Path
 
     @inject
-    def __init__(self, config: Configuration):
+    def __init__(self, config: Configuration, company_factory: CompanyFactory):
         self._raw_companies = config.companies_json_path
+        self._company_factory = company_factory
 
-    def store_companies(self):
-        with open(self._raw_companies, "r") as f:
-            list_info = json.load(f)
+    def store_all_companies(self):
+        companies_dc = self._load_companies()
+        companies = self._company_factory.build_companies_from_dataclass(companies_dc)
 
-        for info in list_info:
-            try:
-                _ = Company.objects.get(symbol=info["symbol"])
-                logger.warning(f"[COMPANY] {info['name']} already exists")
-            except ObjectDoesNotExist:
-                company = self._build_company(info)
-                logger.info(f"[COMPANY] {company.name} successfully created")
-
+        self._save_companies(companies)
         logger.info(f"Successfully created {Company.objects.count()} companies")
 
-    def _build_company(self, infos: dict[str, Any]) -> Company:
-        comp = self._create_company_from_info(infos)
-        urls = self._create_company_infos(infos)
-        comp.info = urls
-        comp.save()
-        return comp
+    def store_dc_company(self, company_dc: CompanyDC):
+        if Company.objects.filter(symbol=company_dc.symbol).exists():
+            logger.warning(f"[COMPANY] {company_dc.name} already exists")
+        else:
+            company = self._company_factory.build_company_from_dataclass(company_dc)
+            company.save()
 
-    def _create_company_from_info(self, infos: dict[str, Any]) -> Company:
-        comp = Company(name=infos["name"], symbol=infos["symbol"])
-        return comp
+    def _load_companies(self):
+        list_companies = json.loads(self._raw_companies.read_text())
+        return [CompanyDC.from_dict(company) for company in list_companies]
 
-    def _create_company_infos(self, infos: dict[str, Any]) -> CompanyInfo:
-        info_urls = CompanyInfo(
-            bourso_url=infos["bourso_url"],
-            bfm_url=infos["bfm_url"],
-            yahoo_url=infos["yahoo_url"],
-            quotes_file_path=infos.get("local_file_path"),
-            sector=infos["sector"],
-            sub_sector=infos["sub_sector"],
-        )
-        return info_urls
-
-    def update_company_fields(self):
-        for info in self.list_info:
-            company = Company.objects.get(symbol=info["symbol"])
-            missing_fields = set(info.keys()) - set(
-                [
-                    field.name
-                    for field in company._meta.fields
-                    if company.__getattribute__(field.name)
-                ]
-            )
-
-            for miss_field in missing_fields:
-                logger.info(f"[UPDATING] {info['name']}")
-                company.__setattr__(miss_field, info[miss_field])
-                company.save()
-                logger.info(f"[COMPANY] {info['name']} successfully updated")
+    @staticmethod
+    def _save_companies(company_list: list[Company]) -> NoReturn:
+        Company.objects.bulk_create(company_list)
