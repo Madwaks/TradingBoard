@@ -1,7 +1,7 @@
 from typing import Type, Optional
 from typing import TypeVar
 
-from django.conf import settings
+from django.conf import settings, LazySettings
 from injector import Injector, Binder
 
 T = TypeVar("T")
@@ -9,16 +9,16 @@ T = TypeVar("T")
 _injector: Optional[Injector] = None
 
 
-def _configure_company_storer(binder: Binder, settings):
-    from core.utils.store_data.companies import CompanyStorer
+def _configure_company_storer(binder: Binder, settings: LazySettings):
+    from core.utils.store_data.companies import CompanyImporter
 
     binder.bind(
-        CompanyStorer.Configuration,
-        CompanyStorer.Configuration(companies_json_path=settings.COMPANIES_JSON_PATH),
+        CompanyImporter.Configuration,
+        CompanyImporter.Configuration(companies_json_path=settings.COMPANIES_JSON_PATH),
     )
 
 
-def _configure_data_downloader(binder: Binder, settings):
+def _configure_data_downloader(binder: Binder, settings: LazySettings):
     from core.utils.driver_manager.driver import DriverManager
 
     binder.bind(

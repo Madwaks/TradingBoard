@@ -2,7 +2,7 @@ import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import NoReturn
+from typing import Union
 
 from injector import singleton, inject
 
@@ -14,34 +14,37 @@ logger = logging.getLogger("django")
 
 
 @singleton
-class CompanyStorer:
+class CompanyImporter:
     @dataclass
     class Configuration:
         companies_json_path: Path
 
     @inject
     def __init__(self, config: Configuration, company_factory: CompanyFactory):
-        self._raw_companies = config.companies_json_path
+        self._companies_json_path = config.companies_json_path
         self._company_factory = company_factory
 
-    def store_all_companies(self):
+    def import_all_companies(self):
         companies_dc = self._load_companies()
-        companies = self._company_factory.build_companies_from_dataclass(companies_dc)
+        for company in companies_dc:
+            self.import_company(company)
 
-        self._save_companies(companies)
         logger.info(f"Successfully created {Company.objects.count()} companies")
 
-    def store_dc_company(self, company_dc: CompanyDC):
-        if Company.objects.filter(symbol=company_dc.symbol).exists():
-            logger.warning(f"[COMPANY] {company_dc.name} already exists")
+    def import_company(self, company_dc: CompanyDC):
+        company = self._company_factory.build_company_from_dataclass(company_dc)
+        self._save_company(company)
+
+    def _save_company(self, company: Company):
+        if self.company_exists(company):
+            logger.warning(f"[COMPANY] {company.name} already exists")
         else:
-            company = self._company_factory.build_company_from_dataclass(company_dc)
             company.save()
 
     def _load_companies(self):
-        list_companies = json.loads(self._raw_companies.read_text())
+        list_companies = json.loads(self._companies_json_path.read_text())
         return [CompanyDC.from_dict(company) for company in list_companies]
 
     @staticmethod
-    def _save_companies(company_list: list[Company]) -> NoReturn:
-        Company.objects.bulk_create(company_list)
+    def company_exists(company: Union[Company, CompanyDC]) -> bool:
+        return Company.objects.filter(symbol=company.symbol).exists()

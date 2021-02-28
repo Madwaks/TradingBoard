@@ -58,7 +58,7 @@ class QuotationDownloader:
             str((self._driver_manager.download_path / "*").absolute())
         )
         latest_file = max(list_of_files, key=os.path.getctime)
-        company.info.quotes_file_path = latest_file
+        company.info.quotes_file_path = latest_file.strip(".crdownload")
         company.info.save()
 
     def _download_quotation(self):

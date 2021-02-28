@@ -1,11 +1,11 @@
 import pytest
 
 from core.models import Company
-from core.utils.store_data.companies import CompanyStorer
+from core.utils.store_data.companies import CompanyImporter
 
 
 @pytest.mark.django_db
-def test_store_from_file(company_storer: CompanyStorer):
+def test_store_from_file(company_storer: CompanyImporter):
     assert len(Company.objects.all()) == 0
     company_storer.store_companies()
     companies_created = Company.objects.all()

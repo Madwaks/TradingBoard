@@ -38,4 +38,5 @@ class DriverManager:
         return web_driver
 
     def disconnect(self):
-        self.driver.quit()
+        if self.driver:
+            self.driver.quit()
