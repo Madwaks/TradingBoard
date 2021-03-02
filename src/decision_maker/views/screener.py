@@ -2,7 +2,7 @@ from logging import getLogger
 
 from django.db import transaction
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 
 from decision_maker.forms.condition import ConditionFormSet
 from decision_maker.forms.screener import ScreenerForm
@@ -70,3 +70,7 @@ class ScreenerCreate(CreateView):
 #                 kwargs={"pks": [company.pk for company in final_companies]},
 #             )
 #         )
+
+
+class ScreenerTest(TemplateView):
+    template_name = "screener_test.html"

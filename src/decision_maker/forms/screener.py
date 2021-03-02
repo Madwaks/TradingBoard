@@ -11,14 +11,14 @@ class ScreenerForm(forms.ModelForm):
         model = Screener
         exclude = ()
 
-    def __init__(self, *args, **kwargs):
-        super(ScreenerForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = True
-        self.helper.form_class = "form-horizontal"
-        self.helper.label_class = "col-md-3 create-label"
-        self.helper.field_class = "col-md-9"
-        self.helper.layout = Layout(
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.form_tag = True
+        helper.form_class = "form-horizontal"
+        helper.label_class = "col-md-3 create-label"
+        helper.field_class = "col-md-9"
+        helper.layout = Layout(
             Div(
                 Field("name"),
                 Fieldset("Add conditions", Formset("conditions")),
@@ -26,3 +26,4 @@ class ScreenerForm(forms.ModelForm):
                 ButtonHolder(Submit("submit", "save")),
             )
         )
+        return helper

@@ -4,6 +4,7 @@ from typing import Optional
 from django.db import models
 
 from core.managers.company import CompanyManager
+from core.models import Quote
 from core.utils.etc import _is_market_ongoing
 
 
@@ -35,8 +36,8 @@ class Company(models.Model):
         return self.name
 
     @property
-    def last_dated_quotation(self) -> Optional[str]:
-        return self.quotes.latest("date").date if self.quotes.exists() else None
+    def last_dated_quotation(self) -> Optional[Quote]:
+        return self.quotes.latest("date") if self.quotes.exists() else None
 
     @property
     def is_up_to_date(self) -> bool:

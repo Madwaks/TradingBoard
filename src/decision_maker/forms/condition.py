@@ -14,7 +14,7 @@ ConditionFormSet = inlineformset_factory(
     Screener,
     Condition,
     form=ConditionForm,
-    fields=["name", "operator", "other_name"],
+    fields=["name", "operator", "other_name", "day_number", "condition"],
     extra=4,
     can_delete=True,
 )
