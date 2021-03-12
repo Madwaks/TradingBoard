@@ -55,6 +55,7 @@ class Company(models.Model):
         info = self.info
         if info and info.pk is None:
             info.save()
+
         self.info = info
 
         super().save(**kwargs)

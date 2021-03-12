@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Optional
 
 from dataclasses_json import DataClassJsonMixin
 
@@ -10,7 +11,7 @@ class CompanyInfo(DataClassJsonMixin):
     bfm_url: str
     sector: str
     sub_sector: str
-    quotes_file_path: str
+    quotes_file_prefix: Optional[str] = None
 
 
 @dataclass

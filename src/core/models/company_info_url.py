@@ -11,7 +11,7 @@ class CompanyInfo(models.Model):
     sub_sector = models.CharField(max_length=256, blank=True, null=True)
     creation_date = models.DateField(blank=True, null=True)
 
-    quotes_file_path = models.CharField(max_length=128, blank=True, null=True)
+    quotes_file_prefix = models.CharField(max_length=128, blank=True, null=True)
 
     def __str__(self):
         return str(self.company)

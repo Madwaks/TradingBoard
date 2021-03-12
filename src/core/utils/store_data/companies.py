@@ -2,11 +2,10 @@ import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
 
 from injector import singleton, inject
 
-from core.models import Company
+from core.models import Company, CompanyInfo
 from core.services.factories.company import CompanyFactory
 from core.utils.models.company import Company as CompanyDC
 
@@ -38,6 +37,7 @@ class CompanyImporter:
     def _save_company(self, company: Company):
         if self.company_exists(company):
             logger.warning(f"[COMPANY] {company.name} already exists")
+            self._update_company_info_if_needed(company)
         else:
             company.save()
 
@@ -46,5 +46,26 @@ class CompanyImporter:
         return [CompanyDC.from_dict(company) for company in list_companies]
 
     @staticmethod
-    def company_exists(company: Union[Company, CompanyDC]) -> bool:
+    def company_exists(company: Company) -> bool:
         return Company.objects.filter(symbol=company.symbol).exists()
+
+    def _update_company_info_if_needed(self, new_company: Company):
+        info_fields_to_exclude = ["company", "id", "quotes_file_path"]
+        existing_company = Company.objects.get(symbol=new_company.symbol)
+        model_fields = [field.name for field in CompanyInfo._meta.get_fields()]
+        diff = [
+            field_name
+            for field_name in filter(
+                lambda field: getattr(new_company.info, field, None)
+                != getattr(existing_company.info, field, None),
+                model_fields,
+            )
+            if field_name not in info_fields_to_exclude
+        ]
+        if diff:
+            breakpoint()
+            for field in diff:
+                setattr(existing_company.info, field, getattr(new_company.info, field))
+            existing_company.info.save()
+            existing_company.save()
+            logger.info(f"[COMPANY] {new_company.name} updated fields : {diff}")

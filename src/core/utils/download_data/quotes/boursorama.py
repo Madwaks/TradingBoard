@@ -11,7 +11,9 @@ from tqdm import tqdm
 from core.models.company import Company
 from core.utils.driver_manager.driver import DriverManager
 
-SLEEP_TIME = 2
+SLEEP_TIME = 0.5
+
+logger = logging.getLogger("django")
 
 
 @singleton
@@ -23,15 +25,17 @@ class QuotationDownloader:
     def download_quotes_for_company(
         self, company: Company, force_download: bool = False
     ) -> NoReturn:
-        if company.info.quotes_file_path and not force_download:
-            logging.info(f"[ALREADY DOWNLOADED] <{company.symbol}>")
-            return
 
+        if company.info.quotes_file_prefix or not force_download:
+            logger.info(f"[ALREADY DOWNLOADED] <{company.symbol}>")
+            return
+        logger.info(f"[DOWNLOAD] downloading <{company.name}>")
         self._driver_manager.driver.get(company.info.bourso_url)
         self._download_quotation()
 
-        logging.info(f"[DOWNLOAD] <{company.info.bourso_url}> downloaded")
+        logger.info(f"[DOWNLOAD] <{company.info.bourso_url}> downloaded")
 
+        time.sleep(SLEEP_TIME)
         self._update_company_local_file_path(company)
 
     def download_quotations(self, force_download: bool = False) -> None:
@@ -43,17 +47,23 @@ class QuotationDownloader:
         self._driver_manager.disconnect()
 
     def _update_company_local_file_path(self, company: Company) -> None:
-        list_of_files = glob.glob(
-            str((self._driver_manager.download_path / "*").absolute())
-        )
-        latest_file = max(list_of_files, key=os.path.getctime)
-        company.info.quotes_file_path = latest_file.strip(".crdownload")
-        company.info.save()
+        try:
+            list_of_files = glob.glob(
+                str((self._driver_manager.download_path / "*").absolute())
+            )
+            latest_file = max(list_of_files, key=os.path.getctime)
+            company.info.quotes_file_prefix = latest_file.split("_")[0]
+            company.info.save()
+            company.save()
+        except Exception as err:
+            raise err
 
     def _download_quotation(self):
         full_screen = self._driver_manager.driver.find_element_by_id("fullscreen_btn")
         try:
-            time.sleep(0.5)
+            full_screen = self._driver_manager.driver.find_element_by_id(
+                "fullscreen_btn"
+            )
             full_screen.click()
         except Exception:
             infos = self._driver_manager.driver.find_element_by_class_name(
@@ -62,8 +72,16 @@ class QuotationDownloader:
             self._driver_manager.driver.execute_script(
                 "arguments[0].scrollIntoView(true);", infos
             )
-            full_screen.click()
-        time.sleep(0.5)
+            try:
+                full_screen.click()
+            except Exception:
+                cookies = self._driver_manager.driver.find_element_by_id(
+                    "didomi-notice-disagree-button"
+                )
+                cookies.click()
+                time.sleep(SLEEP_TIME)
+                full_screen.click()
+        time.sleep(SLEEP_TIME)
         try:
             five_years = self._driver_manager.driver.find_element_by_xpath(
                 '//*[@id="main-content"]/div/section[1]/div[2]/article/div[1]/div/div[1]/div[4]/div[2]/div[1]/div['
