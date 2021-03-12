@@ -1,6 +1,7 @@
 import os
 import sys
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from core.utils.store_data.quotes import QuotationStorer
@@ -14,4 +15,4 @@ class Command(BaseCommand):
         sys.path.insert(0, os.getcwd())
 
         storer = provide(QuotationStorer)
-        storer.store_quotations()
+        storer.store_quotations_from_json(settings.QUOTES_FOLDER_PATH)

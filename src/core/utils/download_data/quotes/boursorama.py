@@ -1,8 +1,10 @@
-import glob
 import logging
 import os
 import time
-from typing import NoReturn
+from dataclasses import dataclass
+from os import listdir
+from pathlib import Path
+from typing import NoReturn, Union
 
 from injector import singleton, inject
 from selenium.webdriver import ActionChains
@@ -10,6 +12,7 @@ from tqdm import tqdm
 
 from core.models.company import Company
 from core.utils.driver_manager.driver import DriverManager
+from core.utils.store_data.quotes import QuotationStorer
 
 SLEEP_TIME = 0.5
 
@@ -18,25 +21,46 @@ logger = logging.getLogger("django")
 
 @singleton
 class QuotationDownloader:
+    @dataclass
+    class Configuration:
+        quotes_json_folder: Union[Path, str]
+
     @inject
-    def __init__(self, driver_manager: DriverManager):
+    def __init__(
+        self,
+        config: Configuration,
+        driver_manager: DriverManager,
+        quotes_storer: QuotationStorer,
+    ):
         self._driver_manager = driver_manager
+        self._quote_factory = quotes_storer
+        self._config = config
+
+    @property
+    def json_folder_path(self) -> Path:
+        return Path(self._config.quotes_json_folder)
 
     def download_quotes_for_company(
         self, company: Company, force_download: bool = False
     ) -> NoReturn:
 
-        if company.info.quotes_file_prefix or not force_download:
+        if (
+            self.json_folder_path / company.symbol / ".json"
+        ).exists() or not force_download:
             logger.info(f"[ALREADY DOWNLOADED] <{company.symbol}>")
             return
+
         logger.info(f"[DOWNLOAD] downloading <{company.name}>")
+        logger.info(f"[DOWNLOAD] <{company.info.bourso_url}> downloading")
         self._driver_manager.driver.get(company.info.bourso_url)
         self._download_quotation()
 
-        logger.info(f"[DOWNLOAD] <{company.info.bourso_url}> downloaded")
-
         time.sleep(SLEEP_TIME)
-        self._update_company_local_file_path(company)
+        local_file_path = self._find_last_downloaded_file_path()
+
+        self._quote_factory.write_quotation_json(
+            local_file_path, self.json_folder_path, company
+        )
 
     def download_quotations(self, force_download: bool = False) -> None:
         companies = Company.objects.all()
@@ -46,15 +70,14 @@ class QuotationDownloader:
 
         self._driver_manager.disconnect()
 
-    def _update_company_local_file_path(self, company: Company) -> None:
+    def _find_last_downloaded_file_path(self) -> str:
         try:
-            list_of_files = glob.glob(
-                str((self._driver_manager.download_path / "*").absolute())
-            )
-            latest_file = max(list_of_files, key=os.path.getctime)
-            company.info.quotes_file_prefix = latest_file.split("_")[0]
-            company.info.save()
-            company.save()
+            list_of_files = [
+                file_name.replace(".crdownload", "")
+                for file_name in listdir(self._driver_manager.download_path.absolute())
+            ]
+            file_path = max(list_of_files, key=os.path.getctime)
+            return file_path
         except Exception as err:
             raise err
 

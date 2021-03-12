@@ -20,7 +20,7 @@ class DriverManager:
             self.options.add_argument("--lang=en-US")
             self.options.add_argument("--ignore-certificate-errors")
             self.options.add_argument("--ignore-ssl-errors")
-            # self.options.add_argument("--headless")
+            self.options.add_argument("--headless")
             abs_dl_path = os.path.abspath(self.download_path)
             prefs = {"download.default_directory": abs_dl_path}
             self.options.add_experimental_option("prefs", prefs)

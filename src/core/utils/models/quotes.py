@@ -11,4 +11,5 @@ class Quote(DataClassJsonMixin):
     low: float
     close: float
     volume: int
+    devise: str
     date: datetime = field(default_factory=datetime)

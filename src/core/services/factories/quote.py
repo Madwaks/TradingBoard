@@ -10,44 +10,40 @@ from core.utils.models.quotes import Quote as QuoteDC
 
 @singleton
 class QuoteFactory:
-    def build_quotes_from_dict(
+    def build_quotes_from_dataclass(
         self, list_dc_quotes: list[QuoteDC], company: Company
     ) -> list[Quote]:
         return [
-            self.build_quote_from_dict(quote_dc, company) for quote_dc in list_dc_quotes
+            Quote(
+                date=datetime.datetime.strptime(
+                    quote_dc.date.split(" ")[0], "%d/%m/%Y"
+                ).date(),
+                open=quote_dc.open,
+                close=quote_dc.close,
+                high=quote_dc.high,
+                low=quote_dc.low,
+                volume=quote_dc.volume,
+                company=company,
+            )
+            for quote_dc in list_dc_quotes
         ]
 
-    def build_quote_from_dict(self, quote_dc: QuoteDC, company: Company) -> Quote:
-        return Quote(
-            date=datetime.datetime.strptime(
-                quote_dc.date.split(" ")[0], "%d/%m/%Y"
-            ).date(),
-            open=quote_dc.open,
-            close=quote_dc.close,
-            high=quote_dc.high,
-            low=quote_dc.low,
-            volume=quote_dc.volume,
-            company=company,
-        )
-
     @staticmethod
-    def extract_from_file(company: Company) -> list[Quote]:
-        def parse_row(row: Series) -> Optional[Quote]:
+    def extract_from_file(file_path: str) -> list[QuoteDC]:
+        def parse_row(row: Series) -> Optional[QuoteDC]:
             if row["date"] == "10/11/2020 00:00":
                 return None
-            return Quote(
-                date=datetime.datetime.strptime(
-                    row["date"].split(" ")[0], "%d/%m/%Y"
-                ).date(),
+            date = datetime.datetime.strptime(row["date"].split(" ")[0], "%d/%m/%Y")
+            return QuoteDC(
+                date=date,
                 open=row["ouv"],
                 close=row["clot"],
                 high=row["haut"],
                 low=row["bas"],
                 volume=row["vol"],
                 devise=row["devise"],
-                company=company,
             )
 
-        quotations: DataFrame = read_table(company.info.quotes_file_path)
+        quotations: DataFrame = read_table(file_path)
         list_quotation = quotations.apply(parse_row, axis=1).dropna().to_list()
         return list_quotation

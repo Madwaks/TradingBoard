@@ -27,9 +27,7 @@ class Company(models.Model):
         verbose_name_plural = "Companies"
         ordering = ("name",)
         constraints = (
-            models.UniqueConstraint(
-                fields=("name", "symbol"), name="unique_per_name_symbol"
-            ),
+            models.UniqueConstraint(fields=("symbol",), name="unique_per_symbol"),
         )
 
     def __str__(self):

@@ -13,5 +13,4 @@ class CompanyInfoFactory:
             bfm_url=company_info_dc.bfm_url,
             sector=company_info_dc.sector,
             sub_sector=company_info_dc.sub_sector,
-            quotes_file_path=company_info_dc.quotes_file_path,
         )

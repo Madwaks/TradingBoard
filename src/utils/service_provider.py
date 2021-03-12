@@ -30,9 +30,21 @@ def _configure_data_downloader(binder: Binder, settings: LazySettings):
     )
 
 
+def _configure_quotes_storer(binder: Binder, settings: LazySettings):
+    from core.utils.download_data.quotes.boursorama import QuotationDownloader
+
+    binder.bind(
+        QuotationDownloader.Configuration,
+        QuotationDownloader.Configuration(
+            quotes_json_folder=settings.QUOTES_FOLDER_PATH
+        ),
+    )
+
+
 def _configure(binder: Binder):
     _configure_data_downloader(binder, settings)
     _configure_company_storer(binder, settings)
+    _configure_quotes_storer(binder, settings)
 
 
 def _create_injector():
