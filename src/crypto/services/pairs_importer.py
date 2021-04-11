@@ -26,7 +26,7 @@ class PairsImporter:
         self._client = client
         self._company_factory = company_factory
 
-    def build_all_pairs(self):
+    def import_all_pairs(self):
         data = self._client.get_exchange_info()
         symbols = data["symbols"]
         pairs = [self._build_pair(symbol_info) for symbol_info in symbols]
@@ -42,7 +42,8 @@ class PairsImporter:
 
     def _save_pairs(self, list_pairs: list[Pair]):
         for pair in list_pairs:
-            pair.save()
+            if not pair.pk:
+                pair.save()
 
 
 class TimeUnits(Enum):
@@ -107,13 +108,9 @@ class QuotesPairImporter:
             self.import_quote(pair, TimeUnits.from_code(time_unit))
 
     def import_quote(self, pair: Pair, time_unit: TimeUnits):
-
-        filename_csv = (
-            self._config.file_folder_path / f"{pair.symbol}-{time_unit.value}-data.csv"
-        )
-        filename_json = (
-            self._config.file_folder_path / f"{pair.symbol}-{time_unit.value}-data.json"
-        )
+        file_name = f"{pair.symbol}-{time_unit.value}-data"
+        filename_csv = self._config.file_folder_path / "csv" / f"{file_name}.csv"
+        filename_json = self._config.file_folder_path / "json" / f"{file_name}.json"
         if filename_csv.exists():
             data_df = pd.read_csv(filename_csv)
         else:
@@ -128,7 +125,7 @@ class QuotesPairImporter:
                 f"Downloading all available {time_unit} data for {pair.symbol}. Be patient..!"
             )
         else:
-            logger.log(
+            logger.info(
                 f"Downloading {delta_min} minutes of new data available for {pair.symbol}, i.e. {available_data} instances of {time_unit.value} data."
             )
         klines = self._client.get_historical_klines(
@@ -155,6 +152,7 @@ class QuotesPairImporter:
             ],
         )
         data["timestamp"] = pd.to_datetime(data["timestamp"], unit="ms")
+        data["close_time"] = pd.to_datetime(data["close_time"], unit="ms")
         if len(data_df) > 0:
             temp_df = pd.DataFrame(data)
             data_df = data_df.append(temp_df)

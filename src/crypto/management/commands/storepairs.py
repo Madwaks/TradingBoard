@@ -14,4 +14,4 @@ class Command(BaseCommand):
         from crypto.services.pairs_importer import PairsImporter
 
         pair_importer = provide(PairsImporter)
-        pair_importer.build_all_pairs()
+        pair_importer.import_all_pairs()
