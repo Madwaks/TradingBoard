@@ -34,6 +34,7 @@ class KeyLevelFactory:
         counter_level.update(Counter(min_closes))
         counter_level.update(Counter(max_closes))
         prices = list(counter_level.keys())
+
         kmeans.fit(np.array(prices).reshape(-1, 1))
 
         key_levels = list(kmeans.cluster_centers_.flatten())

@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from typing import Optional
 
 from injector import singleton
@@ -15,9 +15,7 @@ class QuoteFactory:
     ) -> list[Quote]:
         return [
             Quote(
-                date=datetime.datetime.strptime(
-                    quote_dc.date.split(" ")[0], "%d/%m/%Y"
-                ).date(),
+                date=quote_dc.date,
                 open=quote_dc.open,
                 close=quote_dc.close,
                 high=quote_dc.high,
@@ -33,9 +31,9 @@ class QuoteFactory:
         def parse_row(row: Series) -> Optional[QuoteDC]:
             if row["date"] == "10/11/2020 00:00":
                 return None
-            date = datetime.datetime.strptime(row["date"].split(" ")[0], "%d/%m/%Y")
+            date = row["date"].split(" ")[0]
             return QuoteDC(
-                date=date,
+                date=datetime.strptime(date, "%d/%m/%Y"),
                 open=row["ouv"],
                 close=row["clot"],
                 high=row["haut"],

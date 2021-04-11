@@ -38,13 +38,16 @@ INTERNAL_IPS = [
     "127.0.0.1",
     # ...
 ]
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 
 # Application definition
-
+# TODO: Find a way to uninstall some apps
 LOCAL_APPS = [
     "core.apps.CoreConfig",
     "trading_board.apps.TradingBoardConfig",
     "decision_maker.apps.DecisionMakerConfig",
+    "crypto.apps.CryptoConfig",
 ]
 
 INSTALLED_APPS = [
@@ -155,3 +158,5 @@ QUOTES_FOLDER_PATH = Path("static/data/quotes_json/")
 TRADING_SAT_COMP = "https://www.tradingsat.com/"
 YAHOO_FINANCE = "https://finance.yahoo.com"
 BING = "https://www.bing.com"
+
+CRYPTO_QUOTES_FOLDER: Path = Path("src/crypto/data/")

@@ -63,7 +63,6 @@ class CompanyImporter:
             if field_name not in info_fields_to_exclude
         ]
         if diff:
-            breakpoint()
             for field in diff:
                 setattr(existing_company.info, field, getattr(new_company.info, field))
             existing_company.info.save()

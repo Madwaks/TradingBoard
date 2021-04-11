@@ -10,6 +10,6 @@ class IndicatorManager(Manager):
     def get_last_indicators_for_company(self, company: "Company"):
         for ind in self.all():
             if ind.quote.company == company:
-                breakpoint()
+                pass
 
         return self.filter()

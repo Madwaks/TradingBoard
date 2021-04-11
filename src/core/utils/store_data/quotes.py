@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 from typing import NoReturn, Union
 
+from django.core.serializers.json import DjangoJSONEncoder
 from injector import singleton, inject
 from tqdm import tqdm
 
@@ -35,9 +36,13 @@ class QuotationStorer:
             input_file_path
         )
 
-        (output_folder_path / company.symbol / ".json").write_text(
+        (output_folder_path / f"{company.symbol}.json").write_text(
             json.dumps(
-                [json.dumps(quote, indent=4) for quote in list_quotations], indent=4
+                [
+                    quote.to_dict(encode_json=DjangoJSONEncoder)
+                    for quote in list_quotations
+                ],
+                indent=4,
             )
         )
 
@@ -47,9 +52,18 @@ class QuotationStorer:
             if company.quotes.exists():
                 logger.info(f"[QUOTATIONS] for company <{company.name}> already exists")
             else:
-                list_quotations = json.loads((folder_path / company.symbol).read_text())
+                list_quotations = json.loads(
+                    (folder_path / f"{company.symbol}.json").read_text()
+                )
                 logger.info(f"[STORING COMPANY] <{company.name}> 's quotations ")
-                self._save_quotes(list_quotations)
+                list_quotations_dc = [
+                    QuoteDC.from_dict(quote) for quote in list_quotations
+                ]
+                self._save_quotes(
+                    self._quote_factory.build_quotes_from_dataclass(
+                        list_quotations_dc, company
+                    )
+                )
                 logger.info(
                     f"[QUOTATIONS] for company <{company.name}> successfully created"
                 )

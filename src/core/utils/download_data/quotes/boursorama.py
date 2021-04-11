@@ -2,7 +2,7 @@ import logging
 import os
 import time
 from dataclasses import dataclass
-from os import listdir
+from glob import glob
 from pathlib import Path
 from typing import NoReturn, Union
 
@@ -45,7 +45,7 @@ class QuotationDownloader:
     ) -> NoReturn:
 
         if (
-            self.json_folder_path / company.symbol / ".json"
+            self.json_folder_path / f"{company.symbol}.json"
         ).exists() or not force_download:
             logger.info(f"[ALREADY DOWNLOADED] <{company.symbol}>")
             return
@@ -72,10 +72,9 @@ class QuotationDownloader:
 
     def _find_last_downloaded_file_path(self) -> str:
         try:
-            list_of_files = [
-                file_name.replace(".crdownload", "")
-                for file_name in listdir(self._driver_manager.download_path.absolute())
-            ]
+            list_of_files = glob(
+                str((self._driver_manager.download_path / "*").absolute())
+            )
             file_path = max(list_of_files, key=os.path.getctime)
             return file_path
         except Exception as err:

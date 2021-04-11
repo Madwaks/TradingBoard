@@ -14,4 +14,4 @@ python src/manage.py storecompanies
 
 python src/manage.py downloadquotes
 #
-#python src/manage.py storequotes
+python src/manage.py storequotes
