@@ -1,10 +1,11 @@
+from collections import Counter
+
 import numpy as np
 from injector import singleton
 from pandas import DataFrame, Series
 from sklearn.cluster import KMeans
 
 from core.models import Company
-from collections import Counter
 
 
 @singleton

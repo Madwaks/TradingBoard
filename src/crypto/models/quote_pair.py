@@ -1,17 +1,19 @@
+from datetime import datetime
+
 from django.db.models import (
     Model,
     FloatField,
     IntegerField,
     ForeignKey,
     SET_NULL,
-    DateTimeField,
+    CharField,
 )
 
-from datetime import datetime
+from crypto.utils.enums import TimeUnits
 
 
 class QuotePair(Model):
-    timestamp = DateTimeField()
+    timestamp = IntegerField()
     open = FloatField(max_length=128, verbose_name="open_price")
     close = FloatField(max_length=128, verbose_name="close_price")
     high = FloatField(max_length=128, verbose_name="high_price")
@@ -24,7 +26,8 @@ class QuotePair(Model):
         null=True,
         on_delete=SET_NULL,
     )
-    close_time = DateTimeField(null=True)
+    close_time = IntegerField(null=True, blank=True)
+    time_unit = CharField(max_length=128, default=TimeUnits.DAY1.value)
 
     @property
     def open_date(self):

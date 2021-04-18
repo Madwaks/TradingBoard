@@ -1,20 +1,17 @@
 import logging
-import math
-import time
-from dataclasses import dataclass
-from datetime import datetime
-from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
-import pandas as pd
-from dateutil import parser
 from injector import singleton, inject
+from pandas import DataFrame
 
 from core.services.factories.company import CompanyFactory
 from core.services.factories.quote import QuoteFactory
 from crypto.models.pair import Pair
 from crypto.services.client import BinanceClient
+from crypto.services.repositories.quote_pair import QuotesPairRepository
+from crypto.utils.enums import TimeUnits
+from crypto.utils.etc import _retrieve_existing_data
 
 logger = logging.getLogger("django")
 
@@ -46,133 +43,46 @@ class PairsImporter:
                 pair.save()
 
 
-class TimeUnits(Enum):
-    minutes1 = "1m"
-    minutes3 = "3m"
-    minutes5 = "5m"
-    minutes15 = "15m"
-    minutes30 = "30m"
-    HOUR1 = "1h"
-    HOUR2 = "2h"
-    HOUR4 = "4h"
-    HOUR6 = "6h"
-    HOUR8 = "8h"
-    HOUR12 = "12h"
-    DAY1 = "1d"
-    DAY3 = "3d"
-    WEEK1 = "1w"
-    MONTH1 = "1M"
-
-    @classmethod
-    def from_code(cls, code: str):
-        for c_type in cls:
-            if c_type.value == code:
-                return c_type
-        return None
-
-    @property
-    def binsize(self):
-        return self.time_to_binsize[self.value]
-
-    @property
-    def time_to_binsize(self):
-        return {
-            self.minutes1.value: 1,
-            self.minutes5.value: 5,
-            self.minutes15.value: 15,
-            self.HOUR1.value: 60,
-            self.HOUR4.value: 240,
-            self.DAY1.value: 1440,
-        }
-
-
 @singleton
 class QuotesPairImporter:
-    @dataclass
-    class Configuration:
-        file_folder_path: Path
-
     @inject
     def __init__(
         self,
         quote_factory: QuoteFactory,
         client: BinanceClient,
-        configuration: Configuration,
+        quotes_repository: QuotesPairRepository,
     ):
         self._quote_factory = quote_factory
         self._client = client
-        self._config = configuration
+        self._quotes_repo = quotes_repository
 
     def import_all_quotes(self, time_unit: str):
         for pair in Pair.objects.all()[:2]:
-            self.import_quote(pair, TimeUnits.from_code(time_unit))
+            self.import_quotes(pair, TimeUnits.from_code(time_unit))
 
-    def import_quote(self, pair: Pair, time_unit: TimeUnits):
+    def import_quotes(self, pair: Pair, time_unit: TimeUnits):
         file_name = f"{pair.symbol}-{time_unit.value}-data"
-        filename_csv = self._config.file_folder_path / "csv" / f"{file_name}.csv"
-        filename_json = self._config.file_folder_path / "json" / f"{file_name}.json"
-        if filename_csv.exists():
-            data_df = pd.read_csv(filename_csv)
-        else:
-            data_df = pd.DataFrame()
-        oldest_point, newest_point = self.minutes_of_new_data(
-            pair.symbol, time_unit.value, data_df
-        )
-        delta_min = (newest_point - oldest_point).total_seconds() / 60
-        available_data = math.ceil(delta_min / time_unit.binsize)
-        if oldest_point == datetime.strptime("1 Jan 2017", "%d %b %Y"):
-            logger.info(
-                f"Downloading all available {time_unit} data for {pair.symbol}. Be patient..!"
-            )
-        else:
-            logger.info(
-                f"Downloading {delta_min} minutes of new data available for {pair.symbol}, i.e. {available_data} instances of {time_unit.value} data."
-            )
-        klines = self._client.get_historical_klines(
-            pair.symbol,
-            time_unit.value,
-            oldest_point.strftime("%d %b %Y %H:%M:%S"),
-            newest_point.strftime("%d %b %Y %H:%M:%S"),
-        )
-        data = pd.DataFrame(
-            klines,
-            columns=[
-                "timestamp",
-                "open",
-                "high",
-                "low",
-                "close",
-                "volume",
-                "close_time",
-                "quote_av",
-                "trades",
-                "tb_base_av",
-                "tb_quote_av",
-                "ignore",
-            ],
-        )
-        data["timestamp"] = pd.to_datetime(data["timestamp"], unit="ms")
-        data["close_time"] = pd.to_datetime(data["close_time"], unit="ms")
-        if len(data_df) > 0:
-            temp_df = pd.DataFrame(data)
-            data_df = data_df.append(temp_df)
-        else:
-            data_df = data
-        data_df.set_index("timestamp", inplace=True)
-        data_df.to_csv(filename_csv)
-        filename_json.write_text(
-            data_df.reset_index().to_json(orient="records", indent=4)
-        )
-        print("All caught up..!")
-        return data_df
+        filename_csv = self._quotes_repo.csv_folder / f"{file_name}.csv"
+        filename_json = self._quotes_repo.json_folder / f"{file_name}.json"
+        existing_data = _retrieve_existing_data(filename_csv)
 
-    def minutes_of_new_data(self, symbol, time_unit: TimeUnits, data):
-        if len(data) > 0:
-            old = parser.parse(data["timestamp"].iloc[-1])
-        else:
-            old = datetime.strptime("1 Jan 2017", "%d %b %Y")
-        new = pd.to_datetime(
-            self._client.get_klines(symbol=symbol, interval=time_unit)[-1][0], unit="ms"
-        )
-        time.sleep(0.5)
-        return old, new
+        data = self._client.get_needed_pair_quotes(pair, time_unit, existing_data)
+        new_data = self._merge_missing_data(data, existing_data)
+
+        self._save_csv(new_data, filename_csv)
+        self._save_json(filename_json, new_data)
+        logger.info(f"[JSON] {pair.symbol} // {time_unit.value} succeed ")
+
+    def _save_csv(self, new_data: DataFrame, file_name: Path):
+        new_data.to_csv(file_name, index=False)
+
+    def _save_json(self, file_name_json: Path, new_data: DataFrame):
+        file_name_json.write_text(new_data.to_json(orient="records", indent=4))
+
+    def _merge_missing_data(
+        self, new_data: DataFrame, existing_data: Optional[DataFrame]
+    ):
+        if len(existing_data) > 0 and len(new_data) > 0:
+            new_data = existing_data.append(new_data)
+
+        return new_data

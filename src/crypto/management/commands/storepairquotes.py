@@ -11,10 +11,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         sys.path.insert(0, os.getcwd())
-        from crypto.services.pairs_importer import QuotesPairImporter
-
-        pair_importer = provide(QuotesPairImporter)
-        pair_importer.import_all_quotes(time_unit="4h")
 
         from crypto.services.quotes_storer import QuotesPairStorer
 

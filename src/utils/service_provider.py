@@ -4,7 +4,6 @@ from typing import TypeVar
 from django.conf import settings, LazySettings
 from injector import Injector, Binder
 
-
 T = TypeVar("T")
 
 _injector: Optional[Injector] = None
@@ -32,11 +31,11 @@ def _configure_data_downloader(binder: Binder, settings: LazySettings):
 
 
 def _configure_crypto_quots(binder: Binder, settings: LazySettings):
-    from crypto.services.pairs_importer import QuotesPairImporter
+    from crypto.services.repositories.quote_pair import QuotesPairRepository
 
     binder.bind(
-        QuotesPairImporter.Configuration,
-        QuotesPairImporter.Configuration(
+        QuotesPairRepository.Configuration,
+        QuotesPairRepository.Configuration(
             file_folder_path=settings.CRYPTO_QUOTES_FOLDER
         ),
     )
